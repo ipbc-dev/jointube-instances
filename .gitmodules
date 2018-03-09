@@ -1,0 +1,3 @@
+[submodule "PeerTube"]
+	path = PeerTube
+	url = git@github.com:Chocobozzz/PeerTube.git

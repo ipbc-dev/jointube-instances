@@ -1,0 +1,17 @@
+listen:
+  port: 3232
+
+webserver:
+  https: false
+  hostname: 'localhost'
+  port: 3232
+
+database:
+  hostname: 'localhost'
+  port: 5432
+  name: 'peertube_instances'
+  username: 'peertube'
+  password: 'peertube'
+
+log:
+  level: 'info' # debug/info/warning/error
