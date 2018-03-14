@@ -8,10 +8,21 @@ import { areValidationErrors } from './utils'
 const instancesAddValidator = [
   body('host').custom(isHostValid).withMessage('Should have a valid host'),
 
-  (req: express.Request, res: express.Response, next: express.NextFunction) => {
+  async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     logger.debug('Checking instances add parameters', { parameters: req.body })
 
     if (areValidationErrors(req, res)) return
+
+    const instance = await InstanceModel.loadByHost(req.body.host)
+
+    if (instance) {
+      return res
+        .status(409)
+        .json({
+          error: `Instance ${req.body.host} was already added.`
+        })
+        .end()
+    }
 
     return next()
   }

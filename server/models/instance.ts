@@ -1,6 +1,7 @@
 import { AllowNull, Column, CreatedAt, DataType, Is, Model, Table, UpdatedAt } from 'sequelize-typescript'
 import { ServerConfig } from '../../PeerTube/shared/models'
 import { ServerStats } from '../../PeerTube/shared/models/server/server-stats.model'
+import { Instance } from '../../shared/models/instance.model'
 import { isHostValid } from '../helpers/custom-validators/instances'
 import { getSort, throwIfNotValid } from './utils'
 
@@ -60,10 +61,11 @@ export class InstanceModel extends Model<InstanceModel> {
       })
   }
 
-  toFormattedJSON () {
+  toFormattedJSON (): Instance {
     return {
       id: this.id,
       host: this.host,
+      config: this.config,
       stats: this.stats
     }
   }

@@ -24,7 +24,7 @@ instancesRouter.get('/',
 )
 
 instancesRouter.post('/',
-  instancesAddValidator,
+  asyncMiddleware(instancesAddValidator),
   asyncMiddleware(createInstanceRetryWrapper)
 )
 
