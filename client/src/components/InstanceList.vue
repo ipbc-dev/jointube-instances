@@ -3,23 +3,33 @@
     <vue-good-table
       :columns="columns"
       :rows="rows"
-      :paginate="true"
       :lineNumbers="false"
-      styleClass="table table-bordered"
+      styleClass="table table-bordered table-stripped"
     >
+      <div slot="emptystate">
+        Loading...
+      </div>
+
       <template slot="table-row" slot-scope="props">
-        <td>{{ props.row.config.instance.name }}</td>
+        <td>{{ props.row.name }}</td>
         <td>
           <a :href="getUrl(props.row.host)" target="_blank">{{ props.row.host }}</a>
         </td>
-        <td>{{ props.row.stats.totalUsers }}</td>
-        <td>{{ props.row.stats.totalLocalVideos }}</td>
-        <td>{{ props.row.stats.totalInstanceFollowing }}</td>
-        <td>{{ props.row.stats.totalInstanceFollowers }}</td>
+        <td>{{ props.row.version }}</td>
+        <td class="text-end">{{ props.row.totalUsers }}</td>
+        <td class="text-end">{{ props.row.totalLocalVideos }}</td>
+        <td class="text-end">{{ props.row.totalInstanceFollowing }}</td>
+        <td class="text-end">{{ props.row.totalInstanceFollowers }}</td>
       </template>
     </vue-good-table>
   </div>
 </template>
+
+<style lang="scss">
+  .text-end { text-align: end; }
+
+  .emptystate { text-align: center; }
+</style>
 
 <script lang="ts">
   import { Vue, Component } from 'vue-property-decorator'
@@ -31,34 +41,59 @@
   export default class InstanceList extends Vue {
     columns = [
       {
-        label: 'Name'
+        label: 'Name',
+        field: 'name',
+        sortable: true
       },
       {
-        label: 'Url'
+        label: 'Url',
+        field: 'host',
+        sortable: true
       },
       {
-        label: 'Users'
+        label: 'Version',
+        field: 'version',
+        sortable: true
       },
       {
-        label: 'Local videos'
+        label: 'Users',
+        field: 'totalUsers',
+        sortable: true,
+        type: 'number'
       },
       {
-        label: 'Following'
+        label: 'Local videos',
+        field: 'totalLocalVideos',
+        sortable: true,
+        type: 'number'
       },
       {
-        label: 'Followers'
+        label: 'Following',
+        field: 'totalInstanceFollowers',
+        sortable: true,
+        type: 'number'
+      },
+      {
+        label: 'Followers',
+        field: 'totalInstanceFollowing',
+        sortable: true,
+        type: 'number'
       }
     ]
     rows: Instance[] = [ ]
 
     async mounted () {
-      const response = await listInstances()
-
-      this.rows = response.data
+      this.loadData()
     }
 
     getUrl (host: string) {
       return 'https://' + host
+    }
+
+    private async loadData () {
+      const response = await listInstances()
+
+      this.rows = response.data
     }
   }
 </script>

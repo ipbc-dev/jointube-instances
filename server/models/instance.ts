@@ -49,7 +49,7 @@ export class InstanceModel extends Model<InstanceModel> {
     const query = {
       offset: start,
       limit: count,
-      order: getSort(sort)
+      order: InstanceModel.getSort(sort)
     }
 
     return InstanceModel.findAndCountAll(query)
@@ -61,12 +61,27 @@ export class InstanceModel extends Model<InstanceModel> {
       })
   }
 
+  private static getSort (sort: string) {
+    const mappingColumns = {
+      totalUsers: 'stats.totalUsers'
+    }
+
+    return getSort(sort, [ 'id', 'ASC' ], mappingColumns)
+  }
+
   toFormattedJSON (): Instance {
     return {
       id: this.id,
       host: this.host,
-      config: this.config,
-      stats: this.stats
+
+      name: this.config.instance.name,
+      version: this.config.serverVersion,
+      signupAllowed: this.config.signup.allowed,
+
+      totalUsers: this.stats.totalUsers,
+      totalLocalVideos: this.stats.totalLocalVideos,
+      totalInstanceFollowers: this.stats.totalInstanceFollowers,
+      totalInstanceFollowing: this.stats.totalInstanceFollowing
     }
   }
 }

@@ -5,8 +5,16 @@ import { buildApiUrl } from './utils'
 
 const baseInstancePath = '/api/v1/instances'
 
-function listInstances () {
-  return axios.get<ResultList<Instance>>(buildApiUrl(baseInstancePath))
+function listInstances (sort?: string) {
+  const options = {
+    params: {
+      sort,
+      start: 0,
+      count: 100 // https://github.com/xaksis/vue-good-table/issues/186
+    }
+  }
+
+  return axios.get<ResultList<Instance>>(buildApiUrl(baseInstancePath), options)
     .then(res => res.data)
 }
 

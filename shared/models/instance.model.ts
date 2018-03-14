@@ -1,9 +1,13 @@
-import { ServerConfig } from '../../PeerTube/shared'
-import { ServerStats } from '../../PeerTube/shared/models/server/server-stats.model'
-
 export interface Instance {
   id: number
   host: string
-  stats: ServerStats
-  config: ServerConfig
+
+  name: string
+  version: string
+  signupAllowed: boolean
+
+  totalUsers: number
+  totalLocalVideos: number
+  totalInstanceFollowers: number
+  totalInstanceFollowing: number
 }

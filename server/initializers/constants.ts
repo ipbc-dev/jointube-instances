@@ -16,7 +16,7 @@ const CONFIG = {
 }
 
 const SORTABLE_COLUMNS = {
-  INSTANCES: [ 'id', 'username', 'createdAt' ]
+  INSTANCES: [ 'id', 'host', 'createdAt', 'totalUsers' ]
 }
 
 const PAGINATION_COUNT_DEFAULT = 20
