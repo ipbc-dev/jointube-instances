@@ -15,7 +15,8 @@
   "scripts": {
     "tsc": "tsc",
     "tslint": "tslint",
-    "postinstall": "cd client/ && yarn install --pure-lockfile"
+    "postinstall": "cd client/ && yarn install --pure-lockfile",
+    "build": "tsc && cd ./client && npm run build"
   },
   "dependencies": {
     "async": "^2.6.0",
