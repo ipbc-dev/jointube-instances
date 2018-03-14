@@ -3,9 +3,6 @@
   "description": "",
   "version": "0.0.1",
   "private": true,
-  "workspaces": [
-    "PeerTube"
-  ],
   "licence": "GPLv3",
   "engines": {
     "node": ">=8.x"
@@ -15,19 +12,17 @@
     "email": "chocobozzz@framasoft.org",
     "url": "http://github.com/Chocobozzz"
   },
-  "repository": {
-    "type": "git",
-    "url": "git://github.com/Chocobozzz/PeerTube.git"
-  },
   "scripts": {
     "tsc": "tsc",
-    "tslint": "tslint"
+    "tslint": "tslint",
+    "postinstall": "cd client/ && yarn install --pure-lockfile"
   },
   "dependencies": {
     "async": "^2.6.0",
     "bluebird": "^3.5.0",
     "body-parser": "^1.12.4",
     "config": "^1.14.0",
+    "cors": "^2.8.4",
     "express": "^4.12.4",
     "express-validator": "^5.0.0",
     "js-yaml": "^3.5.4",

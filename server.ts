@@ -1,8 +1,14 @@
-// ----------- Node modules -----------
+import { isTestInstance } from './server/helpers/core-utils'
+if (isTestInstance()) {
+  require('source-map-support').install()
+}
+
 import * as bodyParser from 'body-parser'
 import * as express from 'express'
+import * as cors from 'cors'
 import * as morgan from 'morgan'
-import { viewsRouter } from './server/controllers/views'
+import { join } from 'path'
+import { apiRouter } from './server/controllers/api'
 import { logger } from './server/helpers/logger'
 import { API_VERSION, CONFIG } from './server/initializers/constants'
 // Initialize database and models
@@ -26,13 +32,18 @@ app.use(bodyParser.urlencoded({ extended: false }))
 
 // ----------- Views, routes and static files -----------
 
-// import { instancesRoute } from './controllers/api/instances'
+app.use(cors())
 
 const apiRoute = '/api/' + API_VERSION
-// app.use(apiRoute, apiRouter)
+app.use(apiRoute, apiRouter)
 
-// Static files
-app.use('/', viewsRouter)
+// Static client files
+app.use('/js/', express.static(join(__dirname, '../client/dist/js')))
+app.use('/css/', express.static(join(__dirname, '../client/dist/css')))
+
+app.use('/*', function (req, res) {
+  return res.sendFile(join(__dirname, '../client/dist/index.html'))
+})
 
 // ----------- Errors -----------
 

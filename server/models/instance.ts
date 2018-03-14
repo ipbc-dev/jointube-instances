@@ -1,8 +1,8 @@
 import { AllowNull, Column, CreatedAt, DataType, Is, Model, Table, UpdatedAt } from 'sequelize-typescript'
+import { ServerConfig } from '../../PeerTube/shared/models'
+import { ServerStats } from '../../PeerTube/shared/models/server/server-stats.model'
 import { isHostValid } from '../helpers/custom-validators/instances'
-import { getSort, throwIfNotValid } from '@peertube/server/models/utils'
-import { ServerConfig } from '@peertube/shared/models'
-import { ServerStats } from '@peertube/shared/models/server/server-stats.model'
+import { getSort, throwIfNotValid } from './utils'
 
 @Table({
   tableName: 'instance',

@@ -3,7 +3,7 @@ import { body, param } from 'express-validator/check'
 import { isHostValid } from '../../helpers/custom-validators/instances'
 import { logger } from '../../helpers/logger'
 import { InstanceModel } from '../../models/instance'
-import { areValidationErrors } from '@peertube/server/middlewares/validators/utils'
+import { areValidationErrors } from './utils'
 
 const instancesAddValidator = [
   body('host').custom(isHostValid).withMessage('Should have a valid host'),

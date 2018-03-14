@@ -7,11 +7,20 @@
 </template>
 
 <script lang="ts">
-import Vue from 'vue'
-import Component from 'vue-class-component'
+  import { Vue, Component } from 'vue-property-decorator'
 
-@Component
-export default class InstanceList extends Vue {
-  instances: []
-}
+  import { Instance } from '../../../shared/models/instance.model'
+  import { listInstances } from '../shared/instance-http'
+
+  @Component
+  export default class InstanceList extends Vue {
+    instances: Instance[] = [ ]
+
+    async mounted () {
+      const response = await listInstances()
+
+      this.instances = response.data
+    }
+
+  }
 </script>

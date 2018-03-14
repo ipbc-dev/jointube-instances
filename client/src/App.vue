@@ -1,28 +1,37 @@
 <template>
-  <div id="app">
-    <div id="nav">
-      <router-link to="/instances">Instances</router-link>
+  <div>
+    <div class="navbar navbar-expand-lg navbar-light bg-light">
+      <div class="container">
+        <a class="navbar-brand" href="#">PeerTube instances</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+          <div class="navbar-nav">
+            <router-link class="nav-item nav-link" active-class="active" exact to="/instances">
+              Instances <span class="sr-only">(current)</span>
+            </router-link>
+
+            <router-link class="nav-item nav-link" active-class="active" exact to="/instances/add">
+              Add your instance
+            </router-link>
+          </div>
+        </div>
+      </div>
     </div>
-    <router-view/>
+
+    <router-view id="main-container" class="container" />
   </div>
 </template>
 
 <style lang="scss">
-#app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-}
-#nav {
-  padding: 30px;
+  @import '../node_modules/bootstrap/scss/bootstrap';
+
   a {
-    font-weight: bold;
-    color: #2c3e50;
-    &.router-link-exact-active {
-      color: #42b983;
-    }
+    outline: 0;
   }
-}
+
+  #main-container {
+    margin-top: 20px;
+  }
 </style>

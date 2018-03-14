@@ -1,6 +1,9 @@
 import * as Pino from 'pino'
 
-const pino = Pino()
+const pino = Pino({
+  prettyPrint: true,
+  level: 'debug'
+})
 
 // ---------------------------------------------------------------------------
 

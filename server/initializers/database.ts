@@ -1,8 +1,8 @@
 import { Sequelize as SequelizeTypescript } from 'sequelize-typescript'
+import { isTestInstance } from '../helpers/core-utils'
 import { logger } from '../helpers/logger'
 
 import { InstanceModel } from '../models/instance'
-import { isTestInstance } from '@peertube/server/helpers/core-utils'
 import { CONFIG } from './constants'
 
 require('pg').defaults.parseInt8 = true // Avoid BIGINT to be converted to string

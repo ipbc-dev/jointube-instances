@@ -1,7 +1,6 @@
 import 'express-validator'
 import * as validator from 'validator'
-import { isTestInstance } from '@peertube/server/helpers/core-utils'
-import { exists } from '@peertube/server/helpers/custom-validators/misc'
+import { isTestInstance } from '../core-utils'
 
 function isHostValid (host: string) {
   const isURLOptions = {
@@ -14,7 +13,7 @@ function isHostValid (host: string) {
     isURLOptions.require_tld = false
   }
 
-  return exists(host) && validator.isURL(host, isURLOptions) && host.split('://').length === 1
+  return host && validator.isURL(host, isURLOptions) && host.split('://').length === 1
 }
 
 // ---------------------------------------------------------------------------

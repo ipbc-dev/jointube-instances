@@ -16,10 +16,7 @@
     "types": [
       "node"
     ],
-    "baseUrl": ".",
-    "paths": {
-      "@peertube/*": [ "PeerTube/*" ]
-    }
+    "baseUrl": "."
   },
   "exclude": [
     "node_modules",

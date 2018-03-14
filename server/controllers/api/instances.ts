@@ -1,17 +1,17 @@
 import * as express from 'express'
+import { ServerConfig } from '../../../PeerTube/shared/models'
+import { ServerStats } from '../../../PeerTube/shared/models/server/server-stats.model'
+import { retryTransactionWrapper } from '../../helpers/database-utils'
 import { fetchInstanceConfig, fetchInstanceStats } from '../../helpers/instance-requests'
 import { logger } from '../../helpers/logger'
+import { getFormattedObjects } from '../../helpers/utils'
+import { asyncMiddleware } from '../../middlewares/async'
+import { setDefaultPagination } from '../../middlewares/pagination'
+import { setDefaultSort } from '../../middlewares/sort'
 import { instancesAddValidator, instancesRemoveValidator } from '../../middlewares/validators/instances'
+import { paginationValidator } from '../../middlewares/validators/pagination'
 import { instancesSortValidator } from '../../middlewares/validators/sort'
 import { InstanceModel } from '../../models/instance'
-import { retryTransactionWrapper } from '@peertube/server/helpers/database-utils'
-import { getFormattedObjects } from '@peertube/server/helpers/utils'
-import { setDefaultSort } from '@peertube/server/middlewares/sort'
-import { setDefaultPagination } from '@peertube/server/middlewares/pagination'
-import { asyncMiddleware } from '@peertube/server/middlewares/async'
-import { paginationValidator } from '@peertube/server/middlewares/validators/pagination'
-import { ServerConfig } from '@peertube/shared/models'
-import { ServerStats } from '@peertube/shared/models/server/server-stats.model'
 
 const instancesRouter = express.Router()
 
@@ -44,11 +44,26 @@ export {
 async function createInstanceRetryWrapper (req: express.Request, res: express.Response, next: express.NextFunction) {
   const host = req.body.host
 
-  const config = await fetchInstanceConfig(host)
-  const stats = await fetchInstanceStats(host)
+  let config: ServerConfig
+  let stats: ServerStats
 
-  if (!config.serverVersion || stats.totalVideos) {
-    throw new Error('Invalid remote host. Are you sure this is a PeerTube instance?')
+  try {
+    [ config, stats ] = await Promise.all([
+      fetchInstanceConfig(host),
+      fetchInstanceStats(host)
+    ])
+
+    if (!config || !stats || config.serverVersion === undefined|| stats.totalVideos === undefined) {
+      throw new Error('Invalid remote host. Are you sure this is a PeerTube instance?')
+    }
+  } catch (err) {
+    logger.warn(err)
+
+    return res.status(409)
+      .json({
+        error: err.message
+      })
+      .end()
   }
 
   const options = {

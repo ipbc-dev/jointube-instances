@@ -1,5 +1,5 @@
 import * as express from 'express'
-import { badRequest } from '@peertube/server/helpers/utils'
+import { badRequest } from '../../helpers/utils'
 import { instancesRouter } from './instances'
 
 const apiRouter = express.Router()
