@@ -28,9 +28,23 @@ async function fetchInstanceStats (host: string) {
   return body as ServerStats
 }
 
+async function getConfigAndStatsInstance (host: string) {
+  const [ config, stats ] = await Promise.all([
+    fetchInstanceConfig(host),
+    fetchInstanceStats(host)
+  ])
+
+  if (!config || !stats || config.serverVersion === undefined|| stats.totalVideos === undefined) {
+    throw new Error('Invalid remote host. Are you sure this is a PeerTube instance?')
+  }
+
+  return { config, stats }
+}
+
 // ---------------------------------------------------------------------------
 
 export {
+  getConfigAndStatsInstance,
   fetchInstanceConfig,
   fetchInstanceStats
 }

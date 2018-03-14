@@ -1,3 +1,4 @@
+import * as Bluebird from 'bluebird'
 import { AllowNull, Column, CreatedAt, DataType, Is, Model, Table, UpdatedAt } from 'sequelize-typescript'
 import { ServerConfig } from '../../PeerTube/shared/models'
 import { ServerStats } from '../../PeerTube/shared/models/server/server-stats.model'
@@ -59,6 +60,25 @@ export class InstanceModel extends Model<InstanceModel> {
           total: count
         }
       })
+  }
+
+  static listHostsWithId () {
+    const query = {
+      attributes: [ 'id', 'host' ]
+    }
+
+    return InstanceModel.findAll(query)
+  }
+
+  static updateConfigAndStats (id: number, config: any, stats: any) {
+    const options = {
+      where: { id }
+    }
+
+    return InstanceModel.update({
+      config,
+      stats
+    }, options)
   }
 
   private static getSort (sort: string) {

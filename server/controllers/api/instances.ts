@@ -2,7 +2,7 @@ import * as express from 'express'
 import { ServerConfig } from '../../../PeerTube/shared/models'
 import { ServerStats } from '../../../PeerTube/shared/models/server/server-stats.model'
 import { retryTransactionWrapper } from '../../helpers/database-utils'
-import { fetchInstanceConfig, fetchInstanceStats } from '../../helpers/instance-requests'
+import { getConfigAndStatsInstance } from '../../helpers/instance-requests'
 import { logger } from '../../helpers/logger'
 import { getFormattedObjects } from '../../helpers/utils'
 import { asyncMiddleware } from '../../middlewares/async'
@@ -48,14 +48,9 @@ async function createInstanceRetryWrapper (req: express.Request, res: express.Re
   let stats: ServerStats
 
   try {
-    [ config, stats ] = await Promise.all([
-      fetchInstanceConfig(host),
-      fetchInstanceStats(host)
-    ])
-
-    if (!config || !stats || config.serverVersion === undefined|| stats.totalVideos === undefined) {
-      throw new Error('Invalid remote host. Are you sure this is a PeerTube instance?')
-    }
+    const res = await getConfigAndStatsInstance(host)
+    config = res.config
+    stats = res.stats
   } catch (err) {
     logger.warn(err)
 

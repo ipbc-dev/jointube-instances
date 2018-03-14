@@ -13,6 +13,7 @@ import { logger } from './server/helpers/logger'
 import { API_VERSION, CONFIG } from './server/initializers/constants'
 // Initialize database and models
 import { initDatabaseModels, sequelizeTypescript } from './server/initializers/database'
+import { RequestsScheduler } from './server/lib/requests-scheduler'
 
 const app = express()
 
@@ -74,6 +75,8 @@ function onDatabaseInitDone () {
       // ----------- Make the server listening -----------
       app.listen(port, () => {
         logger.info('Server listening on port %d', port)
+
+        RequestsScheduler.Instance.enable()
       })
     })
 }
