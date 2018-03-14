@@ -1,0 +1,19 @@
+[Unit]
+Description=PeerTube instances daemon
+After=network.target postgresql.service
+
+[Service]
+Type=simple
+Environment=NODE_ENV=production
+Environment=NODE_CONFIG_DIR=/var/www/instances-peertube/config
+User=peertube
+Group=peertube
+ExecStart=/usr/bin/npm start
+WorkingDirectory=/var/www/instances-peertube
+StandardOutput=syslog
+StandardError=syslog
+SyslogIdentifier=peertube
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
