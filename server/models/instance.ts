@@ -157,6 +157,7 @@ export class InstanceModel extends Model<InstanceModel> {
       host: this.host,
 
       name: this.config.instance.name,
+      shortDescription: this.config.instance.shortDescription,
       version: this.config.serverVersion,
       signupAllowed: this.config.signup.allowed,
 

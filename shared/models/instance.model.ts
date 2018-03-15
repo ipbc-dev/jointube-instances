@@ -3,6 +3,7 @@ export interface Instance {
   host: string
 
   name: string
+  shortDescription: string
   version: string
   signupAllowed: boolean
 
