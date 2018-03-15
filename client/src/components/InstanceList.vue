@@ -15,7 +15,7 @@
         <td>
           <a :href="getUrl(props.row.host)" target="_blank">{{ props.row.host }}</a>
         </td>
-        <td>{{ props.row.version }}</td>
+        <td class="version">{{ props.row.version }}</td>
         <td class="text-end">{{ props.row.totalUsers }}</td>
         <td class="text-end">{{ props.row.totalLocalVideos }}</td>
         <td class="text-end">{{ props.row.totalInstanceFollowing }}</td>
@@ -24,8 +24,10 @@
           <span class="check-mark" v-if="props.row.signupAllowed">&#x2714;</span>
           <span v-else>&#x274C;</span>
         </td>
-        <td class="text-end">
-          {{ props.row.health }}
+        <td class="icon-cell" :title="props.row.health + '%'">
+          <font-awesome-icon class="health-icon"
+                             :icon="getIcon(props.row.health)" :style="{ color: getIconColor(props.row.health) }"
+          ></font-awesome-icon>
         </td>
       </template>
     </vue-good-table>
@@ -33,9 +35,24 @@
 </template>
 
 <style lang="scss">
-  .text-end { text-align: end; }
+  td {
+    font-size: 0.9em;
+  }
 
   .emptystate { text-align: center; }
+
+  .text-end { text-align: end; }
+
+  .icon-cell {
+    padding: 0 !important;
+    text-align: center !important;
+    vertical-align: middle !important;
+
+    .health-icon {
+      width: 20px !important;
+      height: 20px !important;
+    }
+  }
 </style>
 
 <script lang="ts">
@@ -43,6 +60,9 @@
 
   import { Instance } from '../../../shared/models/instance.model'
   import { listInstances } from '../shared/instance-http'
+  import faSmile from '@fortawesome/fontawesome-free-solid/faSmile'
+  import faMeh from '@fortawesome/fontawesome-free-solid/faMeh'
+  import faFrown from '@fortawesome/fontawesome-free-solid/faFrown'
 
   @Component
   export default class InstanceList extends Vue {
@@ -111,6 +131,22 @@
 
     getUrl (host: string) {
       return 'https://' + host
+    }
+
+    getIcon (health: number) {
+      if (health > 90) return faSmile
+      if (health > 50) return faMeh
+      return faFrown
+    }
+
+    getIconColor (health: number) {
+      if (health > 98) return '#08cd36'
+      if (health > 90) return '#81c307'
+      if (health > 70) return '#cfb11b'
+      if (health > 50) return '#e67a3c'
+      if (health > 20) return '#e7563c'
+
+      return '#f44141'
     }
 
     private async loadData () {
