@@ -8,7 +8,7 @@ import { getFormattedObjects } from '../../helpers/utils'
 import { asyncMiddleware } from '../../middlewares/async'
 import { setDefaultPagination } from '../../middlewares/pagination'
 import { setDefaultSort } from '../../middlewares/sort'
-import { instancesAddValidator, instancesRemoveValidator } from '../../middlewares/validators/instances'
+import { instancesAddValidator, instancesListValidator, instancesRemoveValidator } from '../../middlewares/validators/instances'
 import { paginationValidator } from '../../middlewares/validators/pagination'
 import { instancesSortValidator } from '../../middlewares/validators/sort'
 import { InstanceModel } from '../../models/instance'
@@ -16,6 +16,7 @@ import { InstanceModel } from '../../models/instance'
 const instancesRouter = express.Router()
 
 instancesRouter.get('/',
+  instancesListValidator,
   paginationValidator,
   instancesSortValidator,
   setDefaultSort,
@@ -88,7 +89,9 @@ async function createInstance (host: string, config: ServerConfig, stats: Server
 }
 
 async function listInstances (req: express.Request, res: express.Response, next: express.NextFunction) {
-  const resultList = await InstanceModel.listForApi(req.query.start, req.query.count, req.query.sort)
+  const signup = req.query.signup
+
+  const resultList = await InstanceModel.listForApi(req.query.start, req.query.count, req.query.sort, { signup })
 
   return res.json(getFormattedObjects(resultList.data, resultList.total))
 }

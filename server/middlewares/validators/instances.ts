@@ -1,9 +1,20 @@
 import * as express from 'express'
-import { body, param } from 'express-validator/check'
+import { body, param, query } from 'express-validator/check'
 import { isHostValid } from '../../helpers/custom-validators/instances'
 import { logger } from '../../helpers/logger'
 import { InstanceModel } from '../../models/instance'
 import { areValidationErrors } from './utils'
+
+const instancesListValidator = [
+  query('signup').optional().isBoolean().withMessage('Should have a valid signup filter'),
+
+  (req: express.Request, res: express.Response, next: express.NextFunction) => {
+    logger.debug('Checking instances list parameters', { parameters: req.params })
+
+    if (areValidationErrors(req, res)) return
+    return next()
+  }
+]
 
 const instancesAddValidator = [
   body('host').custom(isHostValid).withMessage('Should have a valid host'),
@@ -56,5 +67,6 @@ const instancesRemoveValidator = [
 
 export {
   instancesAddValidator,
-  instancesRemoveValidator
+  instancesRemoveValidator,
+  instancesListValidator
 }

@@ -1,4 +1,5 @@
 import { AllowNull, Column, CreatedAt, DataType, Default, Is, IsInt, Max, Model, Sequelize, Table, UpdatedAt } from 'sequelize-typescript'
+import { IFindOptions } from 'sequelize-typescript/lib/interfaces/IFindOptions'
 import { ServerConfig } from '../../PeerTube/shared/models'
 import { ServerStats } from '../../PeerTube/shared/models/server/server-stats.model'
 import { Instance } from '../../shared/models/instance.model'
@@ -54,11 +55,21 @@ export class InstanceModel extends Model<InstanceModel> {
     return InstanceModel.findOne(query)
   }
 
-  static listForApi (start: number, count: number, sort: string) {
+  static listForApi (start: number, count: number, sort: string, filters: { signup?: boolean }) {
     const query = {
       offset: start,
       limit: count,
       order: InstanceModel.getSort(sort)
+    }
+
+    if (filters.signup !== undefined) {
+      query['where'] = {
+        config: {
+          signup: {
+            allowed: filters.signup
+          }
+        }
+      }
     }
 
     return InstanceModel.findAndCountAll(query)
