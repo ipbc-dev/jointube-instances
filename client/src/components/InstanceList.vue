@@ -20,6 +20,10 @@
         <td class="text-end">{{ props.row.totalLocalVideos }}</td>
         <td class="text-end">{{ props.row.totalInstanceFollowing }}</td>
         <td class="text-end">{{ props.row.totalInstanceFollowers }}</td>
+        <td class="text-end">
+          <span class="check-mark" v-if="props.row.signupAllowed">&#x2714;</span>
+          <span v-else>&#x274C;</span>
+        </td>
       </template>
     </vue-good-table>
   </div>
@@ -78,6 +82,11 @@
         field: 'totalInstanceFollowing',
         sortable: true,
         type: 'number'
+      },
+      {
+        label: 'Signup',
+        field: 'signupAllowed',
+        sortable: false
       }
     ]
     rows: Instance[] = [ ]

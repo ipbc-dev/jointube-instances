@@ -12,7 +12,7 @@ ExecStart=/usr/bin/npm start
 WorkingDirectory=/var/www/instances-peertube
 StandardOutput=syslog
 StandardError=syslog
-SyslogIdentifier=peertube
+SyslogIdentifier=instances-peertube
 Restart=always
 
 [Install]
