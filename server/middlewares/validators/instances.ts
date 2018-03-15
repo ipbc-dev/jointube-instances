@@ -7,6 +7,7 @@ import { areValidationErrors } from './utils'
 
 const instancesListValidator = [
   query('signup').optional().isBoolean().withMessage('Should have a valid signup filter'),
+  query('healthy').optional().isBoolean().withMessage('Should have a valid healthy filter'),
 
   (req: express.Request, res: express.Response, next: express.NextFunction) => {
     logger.debug('Checking instances list parameters', { parameters: req.params })

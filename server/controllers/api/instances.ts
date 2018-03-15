@@ -90,8 +90,9 @@ async function createInstance (host: string, config: ServerConfig, stats: Server
 
 async function listInstances (req: express.Request, res: express.Response, next: express.NextFunction) {
   const signup = req.query.signup
+  const healthy = req.query.healthy
 
-  const resultList = await InstanceModel.listForApi(req.query.start, req.query.count, req.query.sort, { signup })
+  const resultList = await InstanceModel.listForApi(req.query.start, req.query.count, req.query.sort, { signup, healthy })
 
   return res.json(getFormattedObjects(resultList.data, resultList.total))
 }

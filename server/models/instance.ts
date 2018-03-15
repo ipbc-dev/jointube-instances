@@ -55,21 +55,33 @@ export class InstanceModel extends Model<InstanceModel> {
     return InstanceModel.findOne(query)
   }
 
-  static listForApi (start: number, count: number, sort: string, filters: { signup?: boolean }) {
+  static listForApi (start: number, count: number, sort: string, filters: { signup?: string, healthy?: string }) {
     const query = {
       offset: start,
       limit: count,
-      order: InstanceModel.getSort(sort)
+      order: InstanceModel.getSort(sort),
+      where: {}
     }
 
     if (filters.signup !== undefined) {
-      query['where'] = {
+      Object.assign(query.where, {
         config: {
           signup: {
-            allowed: filters.signup
+            allowed: filters.signup === 'true'
           }
         }
-      }
+      })
+    }
+
+    console.log(filters)
+
+    if (filters.healthy !== undefined) {
+      const symbol = filters.healthy === 'true' ? Sequelize.Op.gte : Sequelize.Op.lt
+      Object.assign(query.where, {
+        score: {
+          [symbol]: INSTANCE_SCORE.HEALTHY_AT
+        }
+      })
     }
 
     return InstanceModel.findAndCountAll(query)
