@@ -1,12 +1,13 @@
 import { ServerConfig } from '../../PeerTube/shared/models'
 import { ServerStats } from '../../PeerTube/shared/models/server/server-stats.model'
+import { isTestInstance } from './core-utils'
 import { doRequest } from './requests'
 
 async function fetchInstanceConfig (host: string) {
   const path = '/api/v1/config'
 
   const options = {
-    uri: 'https://' + host + path,
+    uri: getScheme() + host + path,
     method: 'GET',
     json: true
   }
@@ -19,7 +20,7 @@ async function fetchInstanceStats (host: string) {
   const path = '/api/v1/server/stats'
 
   const options = {
-    uri: 'https://' + host + path,
+    uri: getScheme() + host + path,
     method: 'GET',
     json: true
   }
@@ -47,4 +48,12 @@ export {
   getConfigAndStatsInstance,
   fetchInstanceConfig,
   fetchInstanceStats
+}
+
+// ---------------------------------------------------------------------------
+
+function getScheme () {
+  if (isTestInstance()) return 'http://'
+
+  return 'https://'
 }

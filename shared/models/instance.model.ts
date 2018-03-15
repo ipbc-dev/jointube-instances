@@ -10,4 +10,6 @@ export interface Instance {
   totalLocalVideos: number
   totalInstanceFollowers: number
   totalInstanceFollowing: number
+
+  health: number
 }

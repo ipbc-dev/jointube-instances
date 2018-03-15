@@ -29,17 +29,24 @@ export class RequestsScheduler {
 
     logger.info('Running requests scheduler.')
 
+    const badInstances: number[] = []
+    const goodInstances: number[] = []
+
     const instances = await InstanceModel.listHostsWithId()
     for (const instance of instances) {
       try {
         const { config, stats } = await getConfigAndStatsInstance(instance.host)
         await InstanceModel.updateConfigAndStats(instance.id, config, stats)
 
+        goodInstances.push(instance.id)
         logger.info(`Updated ${instance.host} instance.`)
       } catch (err) {
+        badInstances.push(instance.id)
         logger.warn(`Cannot update ${instance.host} instance.`, err)
       }
     }
+
+    await InstanceModel.updateInstancesScoreAndRemoveBadOnes(goodInstances, badInstances)
 
     this.isRunning = false
   }

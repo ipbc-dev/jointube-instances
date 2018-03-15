@@ -24,6 +24,9 @@
           <span class="check-mark" v-if="props.row.signupAllowed">&#x2714;</span>
           <span v-else>&#x274C;</span>
         </td>
+        <td class="text-end">
+          {{ props.row.health }}
+        </td>
       </template>
     </vue-good-table>
   </div>
@@ -86,7 +89,18 @@
       {
         label: 'Signup',
         field: 'signupAllowed',
-        sortable: false
+        sortable: true,
+        sortFn: function (x: boolean, y: boolean) {
+          if (x < y) return 1
+          if (x === y) return 0
+          return -1
+        }
+      },
+      {
+        label: 'Health',
+        field: 'health',
+        sortable: true,
+        type: 'number'
       }
     ]
     rows: Instance[] = [ ]

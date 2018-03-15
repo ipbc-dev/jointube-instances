@@ -1,9 +1,10 @@
-import * as Bluebird from 'bluebird'
-import { AllowNull, Column, CreatedAt, DataType, Is, Model, Table, UpdatedAt } from 'sequelize-typescript'
+import { AllowNull, Column, CreatedAt, DataType, Default, Is, IsInt, Max, Model, Sequelize, Table, UpdatedAt } from 'sequelize-typescript'
 import { ServerConfig } from '../../PeerTube/shared/models'
 import { ServerStats } from '../../PeerTube/shared/models/server/server-stats.model'
 import { Instance } from '../../shared/models/instance.model'
 import { isHostValid } from '../helpers/custom-validators/instances'
+import { logger } from '../helpers/logger'
+import { INSTANCE_SCORE } from '../initializers/constants'
 import { getSort, throwIfNotValid } from './utils'
 
 @Table({
@@ -21,6 +22,13 @@ export class InstanceModel extends Model<InstanceModel> {
   @Is('Host', value => throwIfNotValid(value, isHostValid, 'valid host'))
   @Column
   host: string
+
+  @AllowNull(false)
+  @Default(INSTANCE_SCORE.MAX)
+  @IsInt
+  @Max(INSTANCE_SCORE.MAX)
+  @Column
+  score: number
 
   @AllowNull(false)
   @Column(DataType.JSONB)
@@ -81,6 +89,60 @@ export class InstanceModel extends Model<InstanceModel> {
     }, options)
   }
 
+  static async removeBadInstances () {
+    const instances = await InstanceModel.listBadInstances()
+
+    const instancesRemovePromises = instances.map(instance => instance.destroy())
+    await Promise.all(instancesRemovePromises)
+
+    const numberOfInstancesRemoved = instances.length
+
+    if (numberOfInstancesRemoved) logger.info('Removed bad %d instances.', numberOfInstancesRemoved)
+  }
+
+  static async updateInstancesScoreAndRemoveBadOnes (goodInstances: number[], badInstances: number[]) {
+    if (goodInstances.length === 0 && badInstances.length === 0) return
+
+    logger.info('Updating %d good instances and %d bad instances scores.', goodInstances.length, badInstances.length)
+
+    if (goodInstances.length !== 0) {
+      await InstanceModel.incrementScores(goodInstances, INSTANCE_SCORE.BONUS)
+        .catch(err => logger.error('Cannot increment scores of good instances.', err))
+    }
+
+    if (badInstances.length !== 0) {
+      await InstanceModel.incrementScores(badInstances, INSTANCE_SCORE.PENALTY)
+        .then(() => InstanceModel.removeBadInstances())
+        .catch(err => logger.error('Cannot decrement scores of bad instances.', err))
+    }
+  }
+
+  private static listBadInstances () {
+    const query = {
+      where: {
+        score: {
+          [Sequelize.Op.lte]: 0
+        }
+      },
+      logging: false
+    }
+
+    return InstanceModel.findAll(query)
+  }
+
+  private static incrementScores (instances: number[], value: number) {
+    const instancesString = instances.map(id => id.toString()).join(',')
+
+    const query = `UPDATE "instance" SET "score" = LEAST("score" + ${value}, ${INSTANCE_SCORE.MAX}) ` +
+      'WHERE id IN (' + instancesString + ')'
+
+    const options = {
+      type: Sequelize.QueryTypes.BULKUPDATE
+    }
+
+    return InstanceModel.sequelize.query(query, options)
+  }
+
   private static getSort (sort: string) {
     const mappingColumns = {
       totalUsers: 'stats.totalUsers'
@@ -101,7 +163,9 @@ export class InstanceModel extends Model<InstanceModel> {
       totalUsers: this.stats.totalUsers,
       totalLocalVideos: this.stats.totalLocalVideos,
       totalInstanceFollowers: this.stats.totalInstanceFollowers,
-      totalInstanceFollowing: this.stats.totalInstanceFollowing
+      totalInstanceFollowing: this.stats.totalInstanceFollowing,
+
+      health: Math.round((this.score / INSTANCE_SCORE.MAX) * 100)
     }
   }
 }
