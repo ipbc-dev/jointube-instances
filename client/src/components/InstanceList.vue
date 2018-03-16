@@ -36,8 +36,8 @@
 </template>
 
 <style lang="scss">
-  td {
-    font-size: 0.9em;
+  td, th {
+    font-size: 0.8em;
   }
 
   .emptystate { text-align: center; }
