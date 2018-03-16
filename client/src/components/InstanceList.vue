@@ -20,6 +20,7 @@
         <td class="text-end">{{ props.row.totalLocalVideos }}</td>
         <td class="text-end">{{ props.row.totalInstanceFollowing }}</td>
         <td class="text-end">{{ props.row.totalInstanceFollowers }}</td>
+        <td class="text-end">{{ props.row.totalVideos }}</td>
         <td class="text-end">
           <span class="check-mark" v-if="props.row.signupAllowed">&#x2714;</span>
           <span v-else>&#x274C;</span>
@@ -103,6 +104,12 @@
       {
         label: 'Followers',
         field: 'totalInstanceFollowing',
+        sortable: true,
+        type: 'number'
+      },
+      {
+        label: 'Total videos',
+        field: 'totalVideos',
         sortable: true,
         type: 'number'
       },

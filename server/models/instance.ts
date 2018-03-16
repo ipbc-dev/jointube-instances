@@ -185,6 +185,7 @@ export class InstanceModel extends Model<InstanceModel> {
       signupAllowed: this.config.signup.allowed,
 
       totalUsers: this.stats.totalUsers,
+      totalVideos: this.stats.totalVideos,
       totalLocalVideos: this.stats.totalLocalVideos,
       totalInstanceFollowers: this.stats.totalInstanceFollowers,
       totalInstanceFollowing: this.stats.totalInstanceFollowing,

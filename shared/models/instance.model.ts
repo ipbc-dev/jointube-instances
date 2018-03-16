@@ -8,6 +8,7 @@ export interface Instance {
   signupAllowed: boolean
 
   totalUsers: number
+  totalVideos: number
   totalLocalVideos: number
   totalInstanceFollowers: number
   totalInstanceFollowing: number
