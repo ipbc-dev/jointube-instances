@@ -8,7 +8,7 @@ import { getFormattedObjects } from '../../helpers/utils'
 import { asyncMiddleware } from '../../middlewares/async'
 import { setDefaultPagination } from '../../middlewares/pagination'
 import { setDefaultSort } from '../../middlewares/sort'
-import { instancesAddValidator, instancesListValidator, instancesRemoveValidator } from '../../middlewares/validators/instances'
+import { instancesAddValidator, instancesListValidator } from '../../middlewares/validators/instances'
 import { paginationValidator } from '../../middlewares/validators/pagination'
 import { instancesSortValidator } from '../../middlewares/validators/sort'
 import { InstanceModel } from '../../models/instance'
@@ -27,11 +27,6 @@ instancesRouter.get('/',
 instancesRouter.post('/',
   asyncMiddleware(instancesAddValidator),
   asyncMiddleware(createInstanceRetryWrapper)
-)
-
-instancesRouter.delete('/:id',
-  asyncMiddleware(instancesRemoveValidator),
-  asyncMiddleware(removeInstance)
 )
 
 // ---------------------------------------------------------------------------
@@ -95,12 +90,4 @@ async function listInstances (req: express.Request, res: express.Response, next:
   const resultList = await InstanceModel.listForApi(req.query.start, req.query.count, req.query.sort, { signup, healthy })
 
   return res.json(getFormattedObjects(resultList.data, resultList.total))
-}
-
-async function removeInstance (req: express.Request, res: express.Response, next: express.NextFunction) {
-  const instance = res.locals.instance as InstanceModel
-
-  await instance.destroy()
-
-  return res.sendStatus(204)
 }
