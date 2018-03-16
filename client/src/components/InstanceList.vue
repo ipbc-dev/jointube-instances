@@ -10,7 +10,7 @@
         Loading...
       </div>
 
-      <template slot="table-row" slot-scope="props">
+      <template class="coucou" slot="table-row" slot-scope="props">
         <td class="name">{{ props.row.name }}</td>
         <td class="host">
           <a :href="getUrl(props.row.host)" target="_blank">{{ props.row.host }}</a>
@@ -45,7 +45,7 @@
   .text-end { text-align: end; }
 
   .name, .host {
-    width: 170px;
+    max-width: 170px;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
