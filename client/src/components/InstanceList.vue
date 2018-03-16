@@ -11,8 +11,8 @@
       </div>
 
       <template slot="table-row" slot-scope="props">
-        <td>{{ props.row.name }}</td>
-        <td>
+        <td class="name">{{ props.row.name }}</td>
+        <td class="host">
           <a :href="getUrl(props.row.host)" target="_blank">{{ props.row.host }}</a>
         </td>
         <td class="version">{{ props.row.version }}</td>
@@ -43,6 +43,17 @@
   .emptystate { text-align: center; }
 
   .text-end { text-align: end; }
+
+  .name, .host {
+    width: 170px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .name, .host, .version {
+    padding-right: 5px !important;
+  }
 
   .icon-cell {
     padding: 0 !important;
