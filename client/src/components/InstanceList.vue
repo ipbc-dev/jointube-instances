@@ -108,13 +108,13 @@
       },
       {
         label: 'Following',
-        field: 'totalInstanceFollowers',
+        field: 'totalInstanceFollowing',
         sortable: true,
         type: 'number'
       },
       {
         label: 'Followers',
-        field: 'totalInstanceFollowing',
+        field: 'totalInstanceFollowers',
         sortable: true,
         type: 'number'
       },
