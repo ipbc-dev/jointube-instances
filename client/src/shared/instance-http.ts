@@ -10,7 +10,7 @@ function listInstances (sort?: string) {
     params: {
       sort,
       start: 0,
-      count: 100 // https://github.com/xaksis/vue-good-table/issues/186
+      count: 500 // https://github.com/xaksis/vue-good-table/issues/186
     }
   }
 
