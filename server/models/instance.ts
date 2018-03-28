@@ -175,6 +175,9 @@ export class InstanceModel extends Model<InstanceModel> {
   }
 
   toFormattedJSON (): Instance {
+    let userVideoQuota: number
+    if (this.config.user) userVideoQuota = this.config.user.videoQuota
+
     return {
       id: this.id,
       host: this.host,
@@ -183,7 +186,7 @@ export class InstanceModel extends Model<InstanceModel> {
       shortDescription: this.config.instance.shortDescription,
       version: this.config.serverVersion,
       signupAllowed: this.config.signup.allowed,
-      userVideoQuota: this.config.user.videoQuota,
+      userVideoQuota,
 
       totalUsers: this.stats.totalUsers,
       totalVideos: this.stats.totalVideos,
