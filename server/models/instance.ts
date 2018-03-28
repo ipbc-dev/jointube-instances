@@ -183,6 +183,7 @@ export class InstanceModel extends Model<InstanceModel> {
       shortDescription: this.config.instance.shortDescription,
       version: this.config.serverVersion,
       signupAllowed: this.config.signup.allowed,
+      userVideoQuota: this.config.user.videoQuota,
 
       totalUsers: this.stats.totalUsers,
       totalVideos: this.stats.totalVideos,

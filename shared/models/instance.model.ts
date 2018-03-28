@@ -6,6 +6,7 @@ export interface Instance {
   shortDescription: string
   version: string
   signupAllowed: boolean
+  userVideoQuota: number
 
   totalUsers: number
   totalVideos: number
