@@ -7,10 +7,10 @@ $ git submodule update --init --recursive
 $ yarn install --pure-lockfile
 ```
 
-Then run simultaneously (for example if 3 terminals):
+Then run simultaneously (for example with 3 terminals):
 
 ```
-$ tsc -w &
+$ tsc -w
 ```
 
 ```
