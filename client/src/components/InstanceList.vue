@@ -10,7 +10,7 @@
         Loading...
       </div>
 
-      <template class="coucou" slot="table-row" slot-scope="props">
+      <template slot="table-row" slot-scope="props">
         <td class="name">{{ props.row.name }}</td>
         <td class="host">
           <a :href="getUrl(props.row.host)" target="_blank">{{ props.row.host }}</a>

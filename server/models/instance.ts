@@ -1,5 +1,4 @@
-import { AllowNull, Column, CreatedAt, DataType, Default, Is, IsInt, Max, Model, Sequelize, Table, UpdatedAt } from 'sequelize-typescript'
-import { IFindOptions } from 'sequelize-typescript/lib/interfaces/IFindOptions'
+import { AllowNull, Sequelize, Column, CreatedAt, DataType, Default, Is, IsInt, Max, Model, Table, UpdatedAt } from 'sequelize-typescript'
 import { ServerConfig } from '../../PeerTube/shared/models'
 import { ServerStats } from '../../PeerTube/shared/models/server/server-stats.model'
 import { Instance } from '../../shared/models/instance.model'
@@ -7,6 +6,7 @@ import { isHostValid } from '../helpers/custom-validators/instances'
 import { logger } from '../helpers/logger'
 import { INSTANCE_SCORE } from '../initializers/constants'
 import { getSort, throwIfNotValid } from './utils'
+import * as sequelize from 'sequelize'
 
 @Table({
   tableName: 'instance',
@@ -73,8 +73,6 @@ export class InstanceModel extends Model<InstanceModel> {
       })
     }
 
-    console.log(filters)
-
     if (filters.healthy !== undefined) {
       const symbol = filters.healthy === 'true' ? Sequelize.Op.gte : Sequelize.Op.lt
       Object.assign(query.where, {
@@ -138,6 +136,26 @@ export class InstanceModel extends Model<InstanceModel> {
         .then(() => InstanceModel.removeBadInstances())
         .catch(err => logger.error('Cannot decrement scores of bad instances.', err))
     }
+  }
+
+  static async getStats () {
+    const query = 'SELECT ' +
+      'COUNT(*) as "totalInstances", ' +
+      'SUM((stats->>\'totalUsers\')::integer) as "totalUsers", ' +
+      'SUM((stats->>\'totalLocalVideos\')::integer) as "totalVideos", ' +
+      'SUM((stats->>\'totalLocalVideoComments\')::integer) as "totalVideoComments", ' +
+      'SUM((stats->>\'totalLocalVideoViews\')::integer) as "totalVideoViews" ' +
+      'FROM "instance"'
+
+    return InstanceModel.sequelize.query(query, { type: sequelize.QueryTypes.SELECT })
+      .then(([ res ]) => res)
+      .then(res => ({
+        totalInstances: res.totalInstances,
+        totalUsers: res.totalUsers,
+        totalVideos: res.totalVideos,
+        totalVideoComments: res.totalVideoComments,
+        totalVideoViews: res.totalVideoViews
+      }))
   }
 
   private static listBadInstances () {

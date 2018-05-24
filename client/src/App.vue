@@ -15,6 +15,10 @@
             <router-link class="nav-item nav-link" active-class="active" exact to="/instances/add">
               Add your instance
             </router-link>
+
+            <router-link class="nav-item nav-link" active-class="active" exact to="/instances/stats">
+              Stats
+            </router-link>
           </div>
         </div>
       </div>

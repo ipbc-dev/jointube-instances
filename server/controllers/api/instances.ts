@@ -12,6 +12,7 @@ import { instancesAddValidator, instancesListValidator } from '../../middlewares
 import { paginationValidator } from '../../middlewares/validators/pagination'
 import { instancesSortValidator } from '../../middlewares/validators/sort'
 import { InstanceModel } from '../../models/instance'
+import { InstanceStats } from '../../../shared/models/instance-stats.model'
 
 const instancesRouter = express.Router()
 
@@ -22,6 +23,10 @@ instancesRouter.get('/',
   setDefaultSort,
   setDefaultPagination,
   asyncMiddleware(listInstances)
+)
+
+instancesRouter.get('/stats',
+  asyncMiddleware(getStats)
 )
 
 instancesRouter.post('/',
@@ -90,4 +95,10 @@ async function listInstances (req: express.Request, res: express.Response, next:
   const resultList = await InstanceModel.listForApi(req.query.start, req.query.count, req.query.sort, { signup, healthy })
 
   return res.json(getFormattedObjects(resultList.data, resultList.total))
+}
+
+async function getStats (req: express.Request, res: express.Response, next: express.NextFunction) {
+  const data: InstanceStats = await InstanceModel.getStats()
+
+  return res.json(data).end()
 }
