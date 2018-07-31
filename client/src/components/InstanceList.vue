@@ -36,6 +36,10 @@
 </template>
 
 <style lang="scss">
+  th.sorting {
+    cursor: pointer;
+  }
+
   td, th {
     font-size: 0.8em;
   }
@@ -70,6 +74,7 @@
 <script lang="ts">
   import { Vue, Component } from 'vue-property-decorator'
 
+  import * as semver from 'semver'
   import { Instance } from '../../../shared/models/instance.model'
   import { listInstances } from '../shared/instance-http'
   import faSmile from '@fortawesome/fontawesome-free-solid/faSmile'
@@ -92,7 +97,12 @@
       {
         label: 'Version',
         field: 'version',
-        sortable: true
+        sortable: true,
+        sortFn: function (v1: string, v2: string) {
+          if (semver.lt(v1, v2)) return 1
+          if (v1 === v2) return 0
+          return -1
+        }
       },
       {
         label: 'Users',

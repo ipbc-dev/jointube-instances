@@ -41,8 +41,8 @@
       addInstance(this.host)
         .then(() => {
           this.loading = false
-          this.host = ''
           this.messageSuccess = `${this.host} has been successfully added.`
+          this.host = ''
         })
         .catch(err => {
           this.loading = false
