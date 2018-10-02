@@ -1,7 +1,8 @@
 import { getConfigAndStatsInstance } from '../helpers/instance-requests'
-import { SCHEDULER_INTERVAL } from '../initializers/constants'
+import { CONCURRENCY_REQUESTS, SCHEDULER_INTERVAL } from '../initializers/constants'
 import { InstanceModel } from '../models/instance'
 import { logger } from '../helpers/logger'
+import * as Bluebird from 'bluebird'
 
 export class RequestsScheduler {
 
@@ -33,7 +34,7 @@ export class RequestsScheduler {
     const goodInstances: number[] = []
 
     const instances = await InstanceModel.listHostsWithId()
-    for (const instance of instances) {
+    await Bluebird.map(instances, async instance => {
       try {
         const { config, stats } = await getConfigAndStatsInstance(instance.host)
         await InstanceModel.updateConfigAndStats(instance.id, config, stats)
@@ -44,7 +45,7 @@ export class RequestsScheduler {
         badInstances.push(instance.id)
         logger.warn(`Cannot update ${instance.host} instance.`, err)
       }
-    }
+    }, { concurrency: CONCURRENCY_REQUESTS })
 
     await InstanceModel.updateInstancesScoreAndRemoveBadOnes(goodInstances, badInstances)
 

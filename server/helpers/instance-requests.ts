@@ -9,7 +9,8 @@ async function fetchInstanceConfig (host: string) {
   const options = {
     uri: getScheme() + host + path,
     method: 'GET',
-    json: true
+    json: true,
+    timeout: 5000
   }
 
   const { body } = await doRequest(options)
@@ -22,7 +23,8 @@ async function fetchInstanceStats (host: string) {
   const options = {
     uri: getScheme() + host + path,
     method: 'GET',
-    json: true
+    json: true,
+    timeout: 5000
   }
 
   const { body } = await doRequest(options)
