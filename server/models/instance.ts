@@ -39,6 +39,11 @@ export class InstanceModel extends Model<InstanceModel> {
   @Column(DataType.JSONB)
   config: ServerConfig
 
+  @AllowNull(false)
+  @Default(false)
+  @Column
+  blacklisted: boolean
+
   @CreatedAt
   createdAt: Date
 
@@ -60,7 +65,9 @@ export class InstanceModel extends Model<InstanceModel> {
       offset: start,
       limit: count,
       order: InstanceModel.getSort(sort),
-      where: {}
+      where: {
+        blacklisted: false
+      }
     }
 
     if (filters.signup !== undefined) {
@@ -145,7 +152,8 @@ export class InstanceModel extends Model<InstanceModel> {
       'SUM((stats->>\'totalLocalVideos\')::integer) as "totalVideos", ' +
       'SUM((stats->>\'totalLocalVideoComments\')::integer) as "totalVideoComments", ' +
       'SUM((stats->>\'totalLocalVideoViews\')::integer) as "totalVideoViews" ' +
-      'FROM "instance"'
+      'FROM "instance" ' +
+      'WHERE blacklisted = false'
 
     return InstanceModel.sequelize.query(query, { type: sequelize.QueryTypes.SELECT })
       .then(([ res ]) => res)
