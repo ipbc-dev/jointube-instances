@@ -87,12 +87,14 @@
       {
         label: 'Name',
         field: 'name',
-        sortable: true
+        sortable: true,
+        filterable: true,
       },
       {
         label: 'Url',
         field: 'host',
-        sortable: true
+        sortable: true,
+        filterable: true
       },
       {
         label: 'Version',
