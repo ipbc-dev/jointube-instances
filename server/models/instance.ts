@@ -1,6 +1,7 @@
 import { AllowNull, Sequelize, Column, CreatedAt, DataType, Default, Is, IsInt, Max, Model, Table, UpdatedAt } from 'sequelize-typescript'
 import { ServerConfig } from '../../PeerTube/shared/models'
 import { ServerStats } from '../../PeerTube/shared/models/server/server-stats.model'
+import { InstanceConnectivityStats } from 'shared/models/instance-connectivity-stats.model'
 import { Instance } from '../../shared/models/instance.model'
 import { isHostValid } from '../helpers/custom-validators/instances'
 import { logger } from '../helpers/logger'
@@ -34,6 +35,10 @@ export class InstanceModel extends Model<InstanceModel> {
   @AllowNull(false)
   @Column(DataType.JSONB)
   stats: ServerStats
+
+  @AllowNull(false)
+  @Column(DataType.JSONB)
+  connectivityStats: InstanceConnectivityStats
 
   @AllowNull(false)
   @Column(DataType.JSONB)
@@ -106,14 +111,15 @@ export class InstanceModel extends Model<InstanceModel> {
     return InstanceModel.findAll(query)
   }
 
-  static updateConfigAndStats (id: number, config: any, stats: any) {
+  static updateConfigAndStats (id: number, config: any, stats: any, connectivityStats: any) {
     const options = {
       where: { id }
     }
 
     return InstanceModel.update({
       config,
-      stats
+      stats,
+      connectivityStats
     }, options)
   }
 
