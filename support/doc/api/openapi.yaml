@@ -1,0 +1,192 @@
+openapi: 3.0.0
+info:
+  title: PeerTube Instances
+  version: 1.0.0
+  contact:
+    name: PeerTube Community
+    url: 'https://instances.joinpeertube.org'
+  x-logo:
+    url: 'https://joinpeertube.org/img/brand.png'
+    altText: PeerTube Project Homepage
+  description: |
+    # Introduction
+    The PeerTube Instances API is built on HTTP(S). Our API is RESTful. It has predictable
+    resource URLs. It returns HTTP response codes to indicate errors. It also
+    accepts and returns JSON in the HTTP body. You can use your favorite
+    HTTP/REST library for your programming language to retrieve instance listings. No
+    official SDK is provided.
+
+    # Errors
+    The API uses standard HTTP status codes to indicate the success or failure
+    of the API call. The body of the response will be JSON in the following
+    format.
+
+    ```
+    {
+      "code": "unauthorized_request", // example inner error code
+      "error": "Token is invalid." // example exposed error message
+    }
+    ```
+externalDocs:
+  url: https://docs.joinpeertube.org/instances-api.html
+tags:
+  - name: Instances
+    description: >
+      Instance and their configuration. Each instance runs a potentatially different version
+      of PeerTube API.
+x-tagGroups:
+  - name: Instances
+    tags:
+      - Instances
+paths:
+  /instances:
+    get:
+      tags:
+      - Instances
+      summary: Get the list of instances
+      parameters:
+      - $ref: '#/components/parameters/start'
+      - $ref: '#/components/parameters/count'
+      - $ref: '#/components/parameters/sort'
+      - $ref: '#/components/parameters/signup'
+      - $ref: '#/components/parameters/healthy'
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Instance'
+                    description: List of instances
+                  total:
+                    type: number
+                    description: Size of instances list
+    post:
+      tags:
+      - Instances
+      summary: Adds an instance to the list
+      requestBody:
+        description: Host to add to the instance list
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                host:
+                  type: string
+            examples:
+              test-server:
+                summary: An example of instance to add to the list
+                value:
+                  host: peertube.cpy.re
+      responses:
+        '200':
+          description: successful operation
+        '409':
+          description: instance already known
+  /instances/stats:
+    get:
+      tags:
+      - Instances
+      summary: Get general statistics about instances
+      responses:
+        '200':
+          description: succesfull operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InstanceStats'
+servers:
+  - url: 'https://intsances.joinpeertube.org/api/v1'
+    description: Official Server (live data - stable version)
+components:
+  parameters:
+    start:
+      name: start
+      in: query
+      required: false
+      description: Offset
+      schema:
+        type: number
+    count:
+      name: count
+      in: query
+      required: false
+      description: Number of instances
+      schema:
+        type: number
+    sort:
+      name: sort
+      in: query
+      required: false
+      description: Sort order
+      schema:
+        type: string
+        enum: [ASC, DESC]
+        description: >
+          Sort order:
+            * `ASC` - Ascending, in number of users
+            * `DESC` - Descending, in number of users
+    signup:
+      name: signup
+      in: query
+      required: false
+      description: Whether to only show instances where registrations are open, or where they are closed
+      schema:
+        type: boolean
+    healthy:
+      name: healthy
+      in: query
+      required: false
+      description: Whether to show healthy instances only or non-healthy instances only (otherwise both are shown)
+      schema:
+        type: boolean
+  schemas:
+    Instance:
+      type: object
+      properties:
+        id:
+          type: number
+        host:
+          type: string
+        name:
+          type: string
+        shortDescription:
+          type: string
+        version:
+          type: string
+        signupAllowed:
+          type: boolean
+        userVideoQuota:
+          type: number
+        totalUsers:
+          type: number
+        totalVideos:
+          type: number
+        totalLocalVideos:
+          type: number
+        totalInstanceFollowers:
+          type: number
+        totalInstanceFollowing:
+          type: number
+        health:
+          type: number
+    InstanceStats:
+      type: object
+      properties:
+        totalInstances:
+          type: number
+        totalUsers:
+          type: number
+        totalVideos:
+          type: number
+        totalVideoComments:
+          type: number
+        totalVideoViews:
+          type: number
