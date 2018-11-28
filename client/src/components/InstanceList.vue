@@ -11,7 +11,7 @@
       </div>
 
       <template slot="table-row" slot-scope="props">
-        <td class="name">{{ props.row.name }}</td>
+        <td class="name" :title="props.row.name">{{ props.row.name }}</td>
         <td class="host">
           <a :href="getUrl(props.row.host)" target="_blank">{{ props.row.host }}</a>
         </td>
