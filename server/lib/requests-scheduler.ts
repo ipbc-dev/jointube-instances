@@ -36,8 +36,8 @@ export class RequestsScheduler {
     const instances = await InstanceModel.listHostsWithId()
     await Bluebird.map(instances, async instance => {
       try {
-        const { config, stats } = await getConfigAndStatsInstance(instance.host)
-        await InstanceModel.updateConfigAndStats(instance.id, config, stats)
+        const { config, stats, connectivityStats } = await getConfigAndStatsInstance(instance.host)
+        await InstanceModel.updateConfigAndStats(instance.id, config, stats, connectivityStats)
 
         goodInstances.push(instance.id)
         logger.info(`Updated ${instance.host} instance.`)
