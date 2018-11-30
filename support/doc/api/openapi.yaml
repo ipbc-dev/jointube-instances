@@ -175,6 +175,8 @@ components:
           type: number
         totalInstanceFollowing:
           type: number
+        supportsIPv6:
+          type: boolean
         health:
           type: number
     InstanceStats:

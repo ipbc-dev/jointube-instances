@@ -214,18 +214,24 @@ export class InstanceModel extends Model<InstanceModel> {
       id: this.id,
       host: this.host,
 
+      // config
       name: this.config.instance.name,
       shortDescription: this.config.instance.shortDescription,
       version: this.config.serverVersion,
       signupAllowed: this.config.signup.allowed,
       userVideoQuota,
 
+      // stats
       totalUsers: this.stats.totalUsers,
       totalVideos: this.stats.totalVideos,
       totalLocalVideos: this.stats.totalLocalVideos,
       totalInstanceFollowers: this.stats.totalInstanceFollowers,
       totalInstanceFollowing: this.stats.totalInstanceFollowing,
 
+      // connectivity
+      supportsIPv6: this.connectivityStats.supportsIPv6,
+
+      // computed stats
       health: Math.round((this.score / INSTANCE_SCORE.MAX) * 100)
     }
   }

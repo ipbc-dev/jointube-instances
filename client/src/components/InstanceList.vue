@@ -25,7 +25,7 @@
           <span class="check-mark" v-if="props.row.signupAllowed">&#x2714;</span>
           <span v-else>&#x274C;</span>
         </td>
-        <td class="icon-cell" :title="props.row.health + '%'">
+        <td class="icon-cell" :title="'Over the course of the last 4 days, the instance was available ' + props.row.health + '% of the time.'">
           <font-awesome-icon class="health-icon"
                              :icon="getIcon(props.row.health)" :style="{ color: getIconColor(props.row.health) }"
           ></font-awesome-icon>
