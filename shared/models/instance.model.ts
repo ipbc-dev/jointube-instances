@@ -14,7 +14,7 @@ export interface Instance {
   totalInstanceFollowers: number
   totalInstanceFollowing: number
 
-  supportsIPv6: boolean
+  supportsIPv6?: boolean
 
   health: number
 }

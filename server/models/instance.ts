@@ -229,7 +229,7 @@ export class InstanceModel extends Model<InstanceModel> {
       totalInstanceFollowing: this.stats.totalInstanceFollowing,
 
       // connectivity
-      supportsIPv6: this.connectivityStats.supportsIPv6,
+      supportsIPv6: this.connectivityStats ? this.connectivityStats.supportsIPv6 : undefined,
 
       // computed stats
       health: Math.round((this.score / INSTANCE_SCORE.MAX) * 100)
