@@ -3,7 +3,9 @@ import App from './App.vue'
 import router from './router'
 
 const VueGoodTable = require('vue-good-table').default
-const FontAwesomeIcon = require('@fortawesome/vue-fontawesome').default
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
+
+import 'vue-good-table/dist/vue-good-table.css'
 
 Vue.component('font-awesome-icon', FontAwesomeIcon)
 Vue.use(VueGoodTable)

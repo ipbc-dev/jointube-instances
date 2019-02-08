@@ -3,6 +3,8 @@
     <vue-good-table
       :columns="columns"
       :rows="rows"
+      :search-options="searchOptions"
+      :sort-options="sortOptions"
       :lineNumbers="false"
       styleClass="table table-bordered table-stripped"
     >
@@ -11,32 +13,34 @@
       </div>
 
       <template slot="table-row" slot-scope="props">
-        <td class="name" :title="props.row.name">{{ props.row.name }}</td>
-        <td class="host">
-          <a :href="getUrl(props.row.host)" target="_blank">{{ props.row.host }}</a>
-        </td>
-        <td class="version">{{ props.row.version }}</td>
-        <td class="text-end">{{ props.row.totalUsers }}</td>
-        <td class="text-end">{{ props.row.totalLocalVideos }}</td>
-        <td class="text-end">{{ props.row.totalInstanceFollowing }}</td>
-        <td class="text-end">{{ props.row.totalInstanceFollowers }}</td>
-        <td class="text-end">{{ props.row.totalVideos }}</td>
-        <td class="text-end">
+        <span v-if="props.column.field === 'name'" :title="props.row.name">{{ props.row.name }}</span>
+
+        <a v-else-if="props.column.field === 'host'" :href="getUrl(props.row.host)" target="_blank">{{ props.row.host }}</a>
+
+        <div class="text-center" v-else-if="props.column.field === 'signupAllowed'">
           <span class="check-mark" v-if="props.row.signupAllowed">&#x2714;</span>
           <span v-else>&#x274C;</span>
-        </td>
-        <td class="icon-cell" :title="'Over the course of the last 4 days, the instance was available ' + props.row.health + '% of the time.'">
+        </div>
+
+        <div
+          v-else-if="props.column.field === 'health'" class="icon-cell"
+          :title="'Over the course of the last 4 days, the instance was available ' + props.row.health + '% of the time.'"
+        >
           <font-awesome-icon class="health-icon"
                              :icon="getIcon(props.row.health)" :style="{ color: getIconColor(props.row.health) }"
           ></font-awesome-icon>
-        </td>
+        </div>
+
+        <span v-else>
+          {{ props.formattedRow[props.column.field] }}
+        </span>
       </template>
     </vue-good-table>
   </div>
 </template>
 
 <style lang="scss">
-  th.sorting {
+  th {
     cursor: pointer;
   }
 
@@ -47,6 +51,7 @@
   .emptystate { text-align: center; }
 
   .text-end { text-align: end; }
+  .text-center { text-align: center; }
 
   .name, .host {
     max-width: 170px;
@@ -83,23 +88,34 @@
 
   @Component
   export default class InstanceList extends Vue {
+    searchOptions = {
+      enabled: true
+    }
+
+    sortOptions = {
+      enabled: true
+    }
+
     columns = [
       {
         label: 'Name',
         field: 'name',
         sortable: true,
         filterable: true,
+        tdClass: 'name'
       },
       {
         label: 'Url',
         field: 'host',
         sortable: true,
-        filterable: true
+        filterable: true,
+        tdClass: 'host'
       },
       {
         label: 'Version',
         field: 'version',
         sortable: true,
+        tdClass: 'version',
         sortFn: function (v1: string, v2: string) {
           if (semver.lt(v1, v2)) return 1
           if (v1 === v2) return 0
@@ -139,8 +155,11 @@
       {
         label: 'Signup',
         field: 'signupAllowed',
+        type: 'boolean',
         sortable: true,
         sortFn: function (x: boolean, y: boolean) {
+          console.log('coucou')
+
           if (x < y) return 1
           if (x === y) return 0
           return -1
