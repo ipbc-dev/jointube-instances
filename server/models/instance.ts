@@ -1,4 +1,4 @@
-import { AllowNull, Sequelize, Column, CreatedAt, DataType, Default, Is, IsInt, Max, Model, Table, UpdatedAt } from 'sequelize-typescript'
+import { AllowNull, Column, CreatedAt, DataType, Default, Is, IsInt, Max, Model, Sequelize, Table, UpdatedAt } from 'sequelize-typescript'
 import { ServerConfig } from '../../PeerTube/shared/models'
 import { ServerStats } from '../../PeerTube/shared/models/server/server-stats.model'
 import { InstanceConnectivityStats } from 'shared/models/instance-connectivity-stats.model'
@@ -65,7 +65,7 @@ export class InstanceModel extends Model<InstanceModel> {
     return InstanceModel.findOne(query)
   }
 
-  static listForApi (start: number, count: number, sort: string, filters: { signup?: string, healthy?: string }) {
+  static listForApi (start: number, count: number, sort: string, filters: { signup?: string, healthy?: string, nsfwPolicy?: string[] }) {
     const query = {
       offset: start,
       limit: count,
@@ -90,6 +90,18 @@ export class InstanceModel extends Model<InstanceModel> {
       Object.assign(query.where, {
         score: {
           [symbol]: INSTANCE_SCORE.HEALTHY_AT
+        }
+      })
+    }
+
+    if (filters.nsfwPolicy !== undefined) {
+      Object.assign(query.where, {
+        config: {
+          instance: {
+            defaultNSFWPolicy: {
+              [Sequelize.Op.any]: filters.nsfwPolicy
+            }
+          }
         }
       })
     }

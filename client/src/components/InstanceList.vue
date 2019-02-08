@@ -46,6 +46,7 @@
 
   td, th {
     font-size: 0.8em;
+    vertical-align: middle !important;
   }
 
   .emptystate { text-align: center; }
