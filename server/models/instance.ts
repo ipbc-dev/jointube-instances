@@ -157,7 +157,8 @@ export class InstanceModel extends Model<InstanceModel> {
       'SUM((stats->>\'totalUsers\')::integer) as "totalUsers", ' +
       'SUM((stats->>\'totalLocalVideos\')::integer) as "totalVideos", ' +
       'SUM((stats->>\'totalLocalVideoComments\')::integer) as "totalVideoComments", ' +
-      'SUM((stats->>\'totalLocalVideoViews\')::integer) as "totalVideoViews" ' +
+      'SUM((stats->>\'totalLocalVideoViews\')::integer) as "totalVideoViews", ' +
+      'SUM((stats->>\'totalLocalVideoFilesSize\')::bigint) as "totalVideoFilesSize" ' +
       'FROM "instance" ' +
       'WHERE blacklisted = false'
 
@@ -168,7 +169,8 @@ export class InstanceModel extends Model<InstanceModel> {
         totalUsers: res.totalUsers,
         totalVideos: res.totalVideos,
         totalVideoComments: res.totalVideoComments,
-        totalVideoViews: res.totalVideoViews
+        totalVideoViews: res.totalVideoViews,
+        totalVideoFilesSize: res.totalVideoFilesSize
       }))
   }
 

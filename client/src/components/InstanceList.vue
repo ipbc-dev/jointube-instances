@@ -158,8 +158,6 @@
         type: 'boolean',
         sortable: true,
         sortFn: function (x: boolean, y: boolean) {
-          console.log('coucou')
-
           if (x < y) return 1
           if (x === y) return 0
           return -1

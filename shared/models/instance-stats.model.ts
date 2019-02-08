@@ -4,4 +4,6 @@ export interface InstanceStats {
   totalVideos: number
   totalVideoComments: number
   totalVideoViews: number
+
+  totalVideoFilesSize: number
 }

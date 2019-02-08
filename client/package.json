@@ -22,10 +22,12 @@
   "devDependencies": {
     "@fortawesome/fontawesome-svg-core": "^1.2.14",
     "@types/axios": "^0.14.0",
+    "@types/bytes": "^3.0.0",
     "@types/semver": "^5.5.0",
     "@vue/cli-plugin-pwa": "^3.4.0",
     "@vue/cli-plugin-typescript": "^3.4.0",
     "@vue/cli-service": "^3.4.0",
+    "bytes": "^3.1.0",
     "node-sass": "^4.11.0",
     "sass-loader": "^7.1.0",
     "semver": "^5.5.0",
