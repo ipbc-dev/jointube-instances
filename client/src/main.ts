@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import App from './App.vue'
+import Footer from './Footer.vue'
 import router from './router'
 
 const VueGoodTable = require('vue-good-table').default
@@ -17,4 +18,8 @@ new Vue({
   render: h => h(App)
 }).$mount('#app')
 
+new Vue({
+  router,
+  render: h => h(Footer)
+}).$mount('#footer')
 

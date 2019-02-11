@@ -90,7 +90,8 @@
   @Component
   export default class InstanceList extends Vue {
     searchOptions = {
-      enabled: true
+      enabled: true,
+      placeholder: 'Search among instances'
     }
 
     sortOptions = {
