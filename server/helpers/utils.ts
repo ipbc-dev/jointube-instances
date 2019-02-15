@@ -12,9 +12,9 @@ function badRequest (req: express.Request, res: express.Response, next: express.
 function faultTolerantResolve (
   address: string,
   rrtype: 'A' | 'AAAA'
-): Bluebird<boolean> {
-  return new Bluebird<boolean>((res, _) => {
-    _faultTolerantResolve(address, rrtype, (err, addresses) => err ? res(false) : res(true))
+): Bluebird<[]> {
+  return new Bluebird<[]>((res, _) => {
+    _faultTolerantResolve(address, rrtype, (err, addresses) => err ? res([]) : res(addresses))
   })
 }
 

@@ -14,12 +14,12 @@ import { join } from 'path'
 import { apiRouter } from './server/controllers/api'
 import { logger } from './server/helpers/logger'
 import { API_VERSION, CONFIG } from './server/initializers/constants'
+import { initGeoip } from './server/initializers/geoip'
 // Initialize database and models
 import { initDatabaseModels, sequelizeTypescript } from './server/initializers/database'
 import { RequestsScheduler } from './server/lib/requests-scheduler'
 
 const app = express()
-
 
 initDatabaseModels(false)
   .then(() => onDatabaseInitDone())
@@ -79,6 +79,7 @@ function onDatabaseInitDone () {
       app.listen(port, () => {
         logger.info('Server listening on port %d', port)
 
+        initGeoip()
         RequestsScheduler.Instance.enable()
       })
     })

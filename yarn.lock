@@ -414,6 +414,11 @@ bcrypt-pbkdf@^1.0.0:
   dependencies:
     tweetnacl "^0.14.3"
 
+big-integer@^1.6.31:
+  version "1.6.41"
+  resolved "https://registry.yarnpkg.com/big-integer/-/big-integer-1.6.41.tgz#6fb0e51bc8661129ef3832d46c939170b81ca794"
+  integrity sha512-d5AT9lMTYJ/ZE/4gzxb+5ttPcRWljVsvv7lF1w9KzkPhVUhBtHrjDo1J8swfZKepfLsliDhYa31zRYwcD0Yg9w==
+
 bluebird@^3.4.6, bluebird@^3.5.0, bluebird@^3.5.3:
   version "3.5.3"
   resolved "https://registry.yarnpkg.com/bluebird/-/bluebird-3.5.3.tgz#7d01c6f9616c9a51ab0f8c549a79dfe6ec33efa7"
@@ -956,6 +961,11 @@ generic-pool@^3.4.0:
   resolved "https://registry.yarnpkg.com/generic-pool/-/generic-pool-3.6.1.tgz#a51a8439ee86f0bbcf100fc1db3f45c86289deb4"
   integrity sha512-iMmD/pY4q0+V+f8o4twE9JPeqfNuX+gJAaIPB3B0W1lFkBOtTxBo6B0HxHPgGhzQA8jego7EWopcYq/UDJO2KA==
 
+geolite2@^1.2.1:
+  version "1.2.1"
+  resolved "https://registry.yarnpkg.com/geolite2/-/geolite2-1.2.1.tgz#b7c62d182021d398f7fc3c9d09a01c067b36cb36"
+  integrity sha512-4NqR+Wr4/KMSDrTq+0jnxL+xiMBiUXFiLBuMCs5gChLhZD6uvWICQxQV3MNpRH3FPGnB4gKHs3gGaYd+6X4sGQ==
+
 get-caller-file@^1.0.1:
   version "1.0.3"
   resolved "https://registry.yarnpkg.com/get-caller-file/-/get-caller-file-1.0.3.tgz#f978fa4c90d1dfe7ff2d6beda2a515e713bdcf4a"
@@ -1301,6 +1311,14 @@ lru-cache@^2.5.0:
   version "2.7.3"
   resolved "https://registry.yarnpkg.com/lru-cache/-/lru-cache-2.7.3.tgz#6d4524e8b955f95d4f5b58851ce21dd72fb4e952"
   integrity sha1-bUUk6LlV+V1PW1iFHOId1y+06VI=
+
+maxmind@^2.12.0:
+  version "2.12.0"
+  resolved "https://registry.yarnpkg.com/maxmind/-/maxmind-2.12.0.tgz#b7d16b0ee2fff50061ead36b258577cb7d85fec5"
+  integrity sha512-gnLdeLg0GFYlrtPt2122RYrRUy8OWxrhYEDCORaUkr6AvKXnLfnNpsFmWUOBYkvZK17XX4NeuMwnjIQM9EcxTw==
+  dependencies:
+    big-integer "^1.6.31"
+    tiny-lru "^6.0.0"
 
 media-typer@0.3.0:
   version "0.3.0"
@@ -2248,6 +2266,11 @@ through@2:
   version "2.3.8"
   resolved "https://registry.yarnpkg.com/through/-/through-2.3.8.tgz#0dd4c9ffaabc357960b1b724115d7e0e86a2e1f5"
   integrity sha1-DdTJ/6q8NXlgsbckEV1+Doai4fU=
+
+tiny-lru@^6.0.0:
+  version "6.0.1"
+  resolved "https://registry.yarnpkg.com/tiny-lru/-/tiny-lru-6.0.1.tgz#558bd6b7232b8b9dfa482147539676fdd75a3a07"
+  integrity sha512-k/vdHz+bFALjmik0URLWBYNuO0hCABTL5dullbZBXvFDdlL8RrKaeLR6YuHfX+6ZXOLkHw+HpNLCUA7DtLMQmg==
 
 to-fast-properties@^1.0.3:
   version "1.0.3"
