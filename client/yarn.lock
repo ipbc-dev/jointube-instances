@@ -6733,6 +6733,11 @@ vue-class-component@^6.0.0, vue-class-component@^6.2.0:
   resolved "https://registry.yarnpkg.com/vue-class-component/-/vue-class-component-6.3.2.tgz#e6037e84d1df2af3bde4f455e50ca1b9eec02be6"
   integrity sha512-cH208IoM+jgZyEf/g7mnFyofwPDJTM/QvBNhYMjqGB8fCsRyTf68rH2ISw/G20tJv+5mIThQ3upKwoL4jLTr1A==
 
+vue-country-flag@^1.1.0:
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/vue-country-flag/-/vue-country-flag-1.1.0.tgz#024c9fd6fbf92909c9b9ce418749aa13eb0c1d28"
+  integrity sha512-Hn5P6/7SI65mp6O89rBH8vF64fEFUGevi/gYch6M41hoKpdF+aDBp+XhSt0jXrKO3sfZYjpu2kvwyyq94Kiguw==
+
 vue-good-table@^2.16.0:
   version "2.16.0"
   resolved "https://registry.yarnpkg.com/vue-good-table/-/vue-good-table-2.16.0.tgz#fb8c522f6170201e16fc242adf97649d37a413e5"

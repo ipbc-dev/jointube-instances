@@ -244,6 +244,7 @@ export class InstanceModel extends Model<InstanceModel> {
 
       // connectivity
       supportsIPv6: this.connectivityStats ? this.connectivityStats.supportsIPv6 : undefined,
+      country: this.connectivityStats ? this.connectivityStats.country : undefined,
 
       // computed stats
       health: Math.round((this.score / INSTANCE_SCORE.MAX) * 100)

@@ -22,6 +22,10 @@
           <span v-else>&#x274C;</span>
         </div>
 
+        <div class="text-center" style="max-height:20px;" v-else-if="props.column.field === 'country'">
+          <country-flag :country="props.row.country" style="margin-top:-21px;"/>
+        </div>
+
         <div
           v-else-if="props.column.field === 'health'" class="icon-cell"
           :title="'Over the course of the last 4 days, the instance was available ' + props.row.health + '% of the time.'"
@@ -164,6 +168,12 @@
           if (x === y) return 0
           return -1
         }
+      },
+      {
+        label: 'Location',
+        field: 'country',
+        type: 'string',
+        sortable: false
       },
       {
         label: 'Health',
