@@ -14,4 +14,4 @@ database:
   password: 'peertube'
 
 log:
-  level: 'info' # debug/info/warning/error
+  level: 'debug' # debug/info/warning/error

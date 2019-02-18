@@ -75,16 +75,6 @@ export class InstanceModel extends Model<InstanceModel> {
       }
     }
 
-    if (filters.signup !== undefined) {
-      Object.assign(query.where, {
-        config: {
-          signup: {
-            allowed: filters.signup === 'true'
-          }
-        }
-      })
-    }
-
     if (filters.healthy !== undefined) {
       const symbol = filters.healthy === 'true' ? Sequelize.Op.gte : Sequelize.Op.lt
       Object.assign(query.where, {
@@ -94,16 +84,28 @@ export class InstanceModel extends Model<InstanceModel> {
       })
     }
 
-    if (filters.nsfwPolicy !== undefined) {
-      Object.assign(query.where, {
-        config: {
+    if (filters.nsfwPolicy !== undefined || filters.signup !== undefined) {
+      const configWhere: any = {}
+
+      if (filters.signup !== undefined) {
+        Object.assign(configWhere, {
+          signup: {
+            allowed: filters.signup === 'true'
+          }
+        })
+      }
+
+      if (filters.nsfwPolicy !== undefined) {
+        Object.assign(configWhere, {
           instance: {
             defaultNSFWPolicy: {
-              [Sequelize.Op.any]: filters.nsfwPolicy
+              [ Sequelize.Op.any ]: filters.nsfwPolicy
             }
           }
-        }
-      })
+        })
+      }
+
+      Object.assign(query.where, { config: configWhere })
     }
 
     return InstanceModel.findAndCountAll(query)
