@@ -44,6 +44,7 @@ app.use(apiRoute, apiRouter)
 // Static client files
 app.use('/js/', express.static(join(__dirname, '../client/dist/js')))
 app.use('/css/', express.static(join(__dirname, '../client/dist/css')))
+app.use('/img/', express.static(join(__dirname, '../client/dist/img')))
 
 app.use('/*', function (req, res) {
   return res.sendFile(join(__dirname, '../client/dist/index.html'))
