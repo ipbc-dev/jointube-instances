@@ -1,5 +1,4 @@
 import * as Bluebird from 'bluebird'
-import * as request from 'request'
 import * as express from 'express'
 import * as retry from 'retry'
 import * as dns from 'dns'
@@ -13,21 +12,21 @@ function faultTolerantResolve (
   address: string,
   rrtype: 'A' | 'AAAA'
 ): Bluebird<[]> {
-  return new Bluebird<[]>((res, _) => {
+  return new Bluebird<[]>(res => {
     _faultTolerantResolve(address, rrtype, (err, addresses) => err ? res([]) : res(addresses))
   })
 }
 
 function _faultTolerantResolve (address, rrtype, cb) {
   const operation = retry.operation({
-    retries: 3,
-    factor: 3,
-    minTimeout: 1 * 1000,
-    maxTimeout: 60 * 1000,
-    randomize: true
+    retries: 1,
+    factor: 2,
+    minTimeout: 1000,
+    maxTimeout: 10 * 1000,
+    randomize: false
   })
 
-  operation.attempt(function (currentAttempt) {
+  operation.attempt(() => {
     dns.resolve(address, rrtype, function (err, addresses) {
       if (operation.retry(err)) {
         return
