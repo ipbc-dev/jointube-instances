@@ -119,7 +119,10 @@ export class InstanceModel extends Model<InstanceModel> {
 
   static listHostsWithId () {
     const query = {
-      attributes: [ 'id', 'host' ]
+      attributes: [ 'id', 'host' ],
+      where: {
+        blacklisted: false
+      }
     }
 
     return InstanceModel.findAll(query)

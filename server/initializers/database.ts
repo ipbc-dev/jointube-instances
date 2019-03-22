@@ -4,6 +4,7 @@ import { logger } from '../helpers/logger'
 
 import { InstanceModel } from '../models/instance'
 import { CONFIG } from './constants'
+import { HistoryModel } from '../models/history'
 
 require('pg').defaults.parseInt8 = true // Avoid BIGINT to be converted to string
 
@@ -37,7 +38,8 @@ const sequelizeTypescript = new SequelizeTypescript({
 
 async function initDatabaseModels (silent: boolean) {
   sequelizeTypescript.addModels([
-    InstanceModel
+    InstanceModel,
+    HistoryModel
   ])
 
   if (!silent) logger.info('Database %s is ready.', dbname)

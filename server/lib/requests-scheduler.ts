@@ -3,6 +3,7 @@ import { CONCURRENCY_REQUESTS, SCHEDULER_INTERVAL } from '../initializers/consta
 import { InstanceModel } from '../models/instance'
 import { logger } from '../helpers/logger'
 import * as Bluebird from 'bluebird'
+import { HistoryModel } from '../models/history'
 
 export class RequestsScheduler {
 
@@ -38,6 +39,7 @@ export class RequestsScheduler {
       try {
         const { config, stats, connectivityStats } = await getConfigAndStatsInstance(instance.host)
         await InstanceModel.updateConfigAndStats(instance.id, config, stats, connectivityStats)
+        await HistoryModel.addEntry(instance.id, stats)
 
         goodInstances.push(instance.id)
         logger.info(`Updated ${instance.host} instance.`)
