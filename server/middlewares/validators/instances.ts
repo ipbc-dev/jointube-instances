@@ -41,11 +41,11 @@ const instancesAddValidator = [
   }
 ]
 
-const instancesRemoveValidator = [
+const instanceGetValidator = [
   param('host').custom(isHostValid).withMessage('Should have a valid host'),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    logger.debug('Checking instances remove parameters', { parameters: req.params })
+    logger.debug('Checking instance get parameters', { parameters: req.params })
 
     if (areValidationErrors(req, res)) return
 
@@ -69,6 +69,6 @@ const instancesRemoveValidator = [
 
 export {
   instancesAddValidator,
-  instancesRemoveValidator,
+  instanceGetValidator,
   instancesListValidator
 }

@@ -177,7 +177,7 @@ export class InstanceModel extends Model<InstanceModel> {
       'SUM((stats->>\'totalLocalVideoViews\')::integer) as "totalVideoViews", ' +
       'SUM((stats->>\'totalLocalVideoFilesSize\')::bigint) as "totalVideoFilesSize" ' +
       'FROM "instance" ' +
-      'WHERE blacklisted = false'
+      'WHERE blacklisted IS FALSE'
 
     return InstanceModel.sequelize.query(query, { type: sequelize.QueryTypes.SELECT })
       .then(([ res ]) => res)

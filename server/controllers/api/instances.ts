@@ -9,11 +9,14 @@ import { getFormattedObjects } from '../../helpers/utils'
 import { asyncMiddleware } from '../../middlewares/async'
 import { setDefaultPagination } from '../../middlewares/pagination'
 import { setDefaultSort } from '../../middlewares/sort'
-import { instancesAddValidator, instancesListValidator } from '../../middlewares/validators/instances'
+import { instanceGetValidator, instancesAddValidator, instancesListValidator } from '../../middlewares/validators/instances'
 import { paginationValidator } from '../../middlewares/validators/pagination'
 import { instancesSortValidator } from '../../middlewares/validators/sort'
 import { InstanceModel } from '../../models/instance'
-import { InstanceStats } from '../../../shared/models/instance-stats.model'
+import { HistoryModel } from '../../models/history'
+import { InstanceStatsHistory } from '../../../shared/models/instance-stats-history.model'
+import { GlobalStats } from '../../../shared/models/global-stats.model'
+import { GlobalStatsHistory } from '../../../shared/models/global-stats-history'
 
 const instancesRouter = express.Router()
 
@@ -26,8 +29,17 @@ instancesRouter.get('/',
   asyncMiddleware(listInstances)
 )
 
+instancesRouter.get('/:host/stats-history',
+  instanceGetValidator,
+  getInstanceStatsHistory
+)
+
 instancesRouter.get('/stats',
-  asyncMiddleware(getStats)
+  asyncMiddleware(getGlobalStats)
+)
+
+instancesRouter.get('/stats-history',
+  asyncMiddleware(getGlobalStatsHistory)
 )
 
 instancesRouter.post('/',
@@ -92,7 +104,7 @@ async function createInstance (host: string, config: ServerConfig, stats: Server
   return instanceCreated
 }
 
-async function listInstances (req: express.Request, res: express.Response, next: express.NextFunction) {
+async function listInstances (req: express.Request, res: express.Response) {
   const signup = req.query.signup
   const healthy = req.query.healthy
   const nsfwPolicy = req.query.nsfwPolicy
@@ -102,8 +114,30 @@ async function listInstances (req: express.Request, res: express.Response, next:
   return res.json(getFormattedObjects(resultList.data, resultList.total))
 }
 
-async function getStats (req: express.Request, res: express.Response, next: express.NextFunction) {
-  const data: InstanceStats = await InstanceModel.getStats()
+async function getGlobalStats (req: express.Request, res: express.Response) {
+  const data: GlobalStats = await InstanceModel.getStats()
 
   return res.json(data).end()
+}
+
+async function getInstanceStatsHistory (req: express.Request, res: express.Response) {
+  const instance = res.locals.instance
+
+  const rows = await HistoryModel.getInstanceHistory(instance.id)
+
+  const result: InstanceStatsHistory = {
+    data: rows.map(d => d.toFormattedJSON())
+  }
+
+  return res.json(result).end()
+}
+
+async function getGlobalStatsHistory (req: express.Request, res: express.Response) {
+  const rows = await HistoryModel.getGlobalStats()
+
+  const result: GlobalStatsHistory = {
+    data: rows
+  }
+
+  return res.json(result).end()
 }

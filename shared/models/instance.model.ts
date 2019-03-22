@@ -1,4 +1,6 @@
-export interface Instance {
+import { InstanceStats } from './instance-stats.model'
+
+export interface Instance extends InstanceStats {
   id: number
   host: string
 
@@ -7,12 +9,6 @@ export interface Instance {
   version: string
   signupAllowed: boolean
   userVideoQuota: number
-
-  totalUsers: number
-  totalVideos: number
-  totalLocalVideos: number
-  totalInstanceFollowers: number
-  totalInstanceFollowing: number
 
   supportsIPv6?: boolean
   country?: string

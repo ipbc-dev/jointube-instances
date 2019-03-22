@@ -39,7 +39,7 @@ export class RequestsScheduler {
       try {
         const { config, stats, connectivityStats } = await getConfigAndStatsInstance(instance.host)
         await InstanceModel.updateConfigAndStats(instance.id, config, stats, connectivityStats)
-        await HistoryModel.addEntry(instance.id, stats)
+        await HistoryModel.addEntryIfNeeded(instance.id, stats)
 
         goodInstances.push(instance.id)
         logger.info(`Updated ${instance.host} instance.`)
