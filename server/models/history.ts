@@ -92,8 +92,7 @@ export class HistoryModel extends Model<HistoryModel> {
       'LIMIT ' + MAX_HISTORY_SIZE
 
     return InstanceModel.sequelize.query(query, { type: Sequelize.QueryTypes.SELECT })
-                        .then(([ res ]) => res)
-                        .then(res => ({
+                        .then(results => results.map(res => ({
                           date: res.date,
                           stats: {
                             totalInstances: res.totalInstances,
@@ -103,7 +102,7 @@ export class HistoryModel extends Model<HistoryModel> {
                             totalVideoViews: res.totalVideoViews,
                             totalVideoFilesSize: res.totalVideoFilesSize
                           }
-                        }))
+                        })))
   }
 
   toFormattedJSON () {
