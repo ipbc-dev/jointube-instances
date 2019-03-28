@@ -9,6 +9,9 @@ import { MAX_HISTORY_SIZE } from '../initializers/constants'
   indexes: [
     {
       fields: [ 'instanceId' ]
+    },
+    {
+      fields: [ 'createdAt' ]
     }
   ]
 })
@@ -89,6 +92,7 @@ export class HistoryModel extends Model<HistoryModel> {
       'INNER JOIN "instance" ON "history"."instanceId" = "instance"."id" ' +
       'WHERE instance.blacklisted IS FALSE ' +
       'GROUP BY DATE("history"."createdAt") ' +
+      'ORDER BY DATE("history"."createdAt") DESC ' +
       'LIMIT ' + MAX_HISTORY_SIZE
 
     return InstanceModel.sequelize.query(query, { type: Sequelize.QueryTypes.SELECT })
