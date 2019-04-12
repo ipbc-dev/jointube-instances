@@ -95,7 +95,10 @@
   export default class InstanceList extends Vue {
     searchOptions = {
       enabled: true,
-      placeholder: 'Search among instances'
+      placeholder: 'Search among instances',
+      searchFn: (row, col, cellValue, searchTerm) => {
+        return row.name.includes(searchTerm) || row.host.includes(searchTerm)
+      }
     }
 
     sortOptions = {

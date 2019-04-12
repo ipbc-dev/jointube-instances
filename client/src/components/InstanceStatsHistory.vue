@@ -51,11 +51,9 @@
         this.chartBuilder('Videos', data, 'totalVideos'),
 
         this.chartBuilder('Users', data, 'totalUsers'),
-
         this.chartBuilder('Comments', data, 'totalVideoComments'),
 
         this.chartBuilder('File sizes', data, 'totalVideoFilesSize'),
-
         this.chartBuilder('Views', data, 'totalVideoViews')
       ]
 
