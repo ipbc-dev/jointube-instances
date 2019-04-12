@@ -1,5 +1,14 @@
 <template>
   <div>
+
+    <div class="top-text">
+      This list is an unmoderated index of public PeerTube instances so it may contain sensitive content.
+
+      PeerTube contributors and Framasoft declines any responsibility for what's listed and linked below.
+
+      However, Framasoft may exclude some entries that are not PeerTube instances, or instances that fake some video metadata (so we can have reliable stats).
+    </div>
+
     <vue-good-table
       :columns="columns"
       :rows="rows"
@@ -79,6 +88,11 @@
       height: 20px !important;
     }
   }
+
+  .top-text {
+    font-size: 14px;
+    margin-bottom: 20px;
+  }
 </style>
 
 <script lang="ts">
@@ -96,7 +110,7 @@
     searchOptions = {
       enabled: true,
       placeholder: 'Search among instances',
-      searchFn: (row, col, cellValue, searchTerm) => {
+      searchFn: (row: any, col: any, cellValue: any, searchTerm: string) => {
         return row.name.includes(searchTerm) || row.host.includes(searchTerm)
       }
     }
