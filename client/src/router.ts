@@ -4,6 +4,7 @@ import Router from 'vue-router'
 import InstanceList from '@/components/InstanceList.vue'
 import InstanceAdd from '@/components/InstanceAdd.vue'
 import InstanceStats from '@/components/InstanceStats.vue'
+
 Vue.use(Router)
 
 export default new Router({

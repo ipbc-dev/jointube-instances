@@ -3,6 +3,7 @@ import { ResultList } from '../../../PeerTube/shared/models/result-list.model'
 import { Instance } from '../../../shared/models/instance.model'
 import { buildApiUrl } from './utils'
 import { InstanceStats } from '../../../shared/models/instance-stats.model'
+import { GlobalStatsHistory } from '../../../shared/models/global-stats-history'
 
 const baseInstancePath = '/api/v1/instances'
 
@@ -28,8 +29,14 @@ function getInstanceStats () {
               .then(res => res.data)
 }
 
+function getGlobalStatsHistory () {
+  return axios.get<GlobalStatsHistory>(buildApiUrl(baseInstancePath) + '/stats-history')
+              .then(res => res.data)
+}
+
 export {
   listInstances,
   addInstance,
+  getGlobalStatsHistory,
   getInstanceStats
 }

@@ -1,34 +1,38 @@
 <template>
-  <div v-if="stats">
-    <div class="block col-md-2 offset-1">
-      <span class="value">{{ stats.totalInstances | formatNumber }}</span>
-      <span class="label">Instances</span>
+  <div>
+    <div v-if="stats">
+      <div class="block col-md-2 offset-1">
+        <span class="value">{{ stats.totalInstances | formatNumber }}</span>
+        <span class="label">Instances</span>
+      </div>
+
+      <div class="block col-md-2 offset-2">
+        <span class="value">{{ stats.totalUsers | formatNumber }}</span>
+        <span class="label">Users</span>
+      </div>
+
+      <div class="block col-md-2 offset-2">
+        <span class="value">{{ stats.totalVideoComments | formatNumber }}</span>
+        <span class="label">Comments</span>
+      </div>
+
+      <div class="block col-md-2 offset-1">
+        <span class="value">{{ stats.totalVideos | formatNumber }}</span>
+        <span class="label">Videos</span>
+      </div>
+
+      <div class="block col-md-2 offset-2">
+        <span class="value">{{ stats.totalVideoViews | formatNumber }}</span>
+        <span class="label">Views</span>
+      </div>
+
+      <div class="block col-md-2 offset-2">
+        <span class="value">{{ stats.totalVideoFilesSize | formatBytes }}</span>
+        <span class="label">Of video files</span>
+      </div>
     </div>
 
-    <div class="block col-md-2 offset-2">
-      <span class="value">{{ stats.totalUsers | formatNumber }}</span>
-      <span class="label">Users</span>
-    </div>
-
-    <div class="block col-md-2 offset-2">
-      <span class="value">{{ stats.totalVideoComments | formatNumber }}</span>
-      <span class="label">Comments</span>
-    </div>
-
-    <div class="block col-md-2 offset-1">
-      <span class="value">{{ stats.totalVideos | formatNumber }}</span>
-      <span class="label">Videos</span>
-    </div>
-
-    <div class="block col-md-2 offset-2">
-      <span class="value">{{ stats.totalVideoViews | formatNumber }}</span>
-      <span class="label">Views</span>
-    </div>
-
-    <div class="block col-md-2 offset-2">
-      <span class="value">{{ stats.totalVideoFilesSize | formatBytes }}</span>
-      <span class="label">Of video files</span>
-    </div>
+    <instance-stats-history class="instance-stats-history"></instance-stats-history>
   </div>
 </template>
 
@@ -61,6 +65,10 @@
     }
   }
 
+  .instance-stats-history {
+    margin-top: 50px;
+  }
+
 </style>
 
 <script lang="ts">
@@ -70,8 +78,12 @@
   import { getInstanceStats } from '../shared/instance-http'
 
   import * as bytes from 'bytes'
+  import InstanceStatsHistory from '@/components/InstanceStatsHistory.vue'
 
   @Component({
+    components: {
+      InstanceStatsHistory
+    },
     filters: {
       formatNumber: (value: string) => value.toLocaleString(),
 

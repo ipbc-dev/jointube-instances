@@ -19,6 +19,7 @@
             <router-link class="nav-item nav-link" active-class="active" exact to="/instances/stats">
               Stats
             </router-link>
+
           </div>
         </div>
       </div>
@@ -31,7 +32,7 @@
 <script>
 module.exports = {
   data() {
-    return { 
+    return {
       title: process.env.VUE_APP_TITLE
     }
   }
