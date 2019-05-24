@@ -4,7 +4,7 @@
     <div class="top-text">
       This list is an unmoderated index of public PeerTube instances so it may contain sensitive content.
 
-      PeerTube contributors and Framasoft declines any responsibility for what's listed and linked below.
+      PeerTube contributors and Framasoft decline any responsibility for what's listed and linked below.
 
       However, Framasoft may exclude some entries that are not PeerTube instances, or instances that fake some video metadata (so we can have reliable stats).
     </div>
