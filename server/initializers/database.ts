@@ -23,7 +23,6 @@ const sequelizeTypescript = new SequelizeTypescript({
   password,
   benchmark: isTestInstance(),
   isolationLevel: SequelizeTypescript.Transaction.ISOLATION_LEVELS.SERIALIZABLE,
-  operatorsAliases: false,
   logging: (message: string, benchmark: number) => {
     if (process.env.NODE_DB_LOG === 'false') return
 

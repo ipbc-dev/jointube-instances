@@ -1,5 +1,5 @@
 import * as express from 'express'
-import { body, param, query } from 'express-validator/check'
+import { body, param, query } from 'express-validator'
 import { isHostValid } from '../../helpers/custom-validators/instances'
 import { logger } from '../../helpers/logger'
 import { InstanceModel } from '../../models/instance'
