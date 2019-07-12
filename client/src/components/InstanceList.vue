@@ -32,7 +32,7 @@
         </div>
 
         <div class="text-center" style="max-height:20px;" v-else-if="props.column.field === 'country'">
-          <country-flag :country="props.row.country" style="margin-top:-21px;"/>
+          <country-flag v-if="props.row.country" :country="props.row.country" style="margin-top:-21px;"/>
         </div>
 
         <div
