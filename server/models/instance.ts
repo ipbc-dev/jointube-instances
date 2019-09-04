@@ -8,6 +8,7 @@ import { logger } from '../helpers/logger'
 import { INSTANCE_SCORE } from '../initializers/constants'
 import { getSort, throwIfNotValid } from './utils'
 import * as sequelize from 'sequelize'
+import { InstanceHost } from '../../shared/models/instance-host.model'
 
 @Table({
   tableName: 'instance',
@@ -115,6 +116,34 @@ export class InstanceModel extends Model<InstanceModel> {
           total: count
         }
       })
+  }
+
+  static listForHostsApi (start: number, count: number, sort: string, filters: { since?: string }) {
+    const query = {
+      attributes: [ 'host', 'createdAt' ],
+      offset: start,
+      limit: count,
+      order: InstanceModel.getSort(sort),
+      where: {
+        blacklisted: false
+      }
+    }
+
+    if (filters.since !== undefined) {
+      Object.assign(query.where, {
+        createdAt: {
+          [Sequelize.Op.gte]: filters.since
+        }
+      })
+    }
+
+    return InstanceModel.findAndCountAll(query)
+                        .then(({ rows, count }) => {
+                          return {
+                            data: rows,
+                            total: count
+                          }
+                        })
   }
 
   static listHostsWithId () {
@@ -253,6 +282,12 @@ export class InstanceModel extends Model<InstanceModel> {
 
       // computed stats
       health: Math.round((this.score / INSTANCE_SCORE.MAX) * 100)
+    }
+  }
+
+  toHostFormattedJSON (): InstanceHost {
+    return {
+      host: this.host
     }
   }
 }

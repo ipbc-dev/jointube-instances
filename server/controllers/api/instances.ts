@@ -9,7 +9,12 @@ import { getFormattedObjects } from '../../helpers/utils'
 import { asyncMiddleware } from '../../middlewares/async'
 import { setDefaultPagination } from '../../middlewares/pagination'
 import { setDefaultSort } from '../../middlewares/sort'
-import { instanceGetValidator, instancesAddValidator, instancesListValidator } from '../../middlewares/validators/instances'
+import {
+  instanceGetValidator,
+  instanceHostsValidator,
+  instancesAddValidator,
+  instancesListValidator
+} from '../../middlewares/validators/instances'
 import { paginationValidator } from '../../middlewares/validators/pagination'
 import { instancesSortValidator } from '../../middlewares/validators/sort'
 import { InstanceModel } from '../../models/instance'
@@ -19,6 +24,15 @@ import { GlobalStats } from '../../../shared/models/global-stats.model'
 import { GlobalStatsHistory } from '../../../shared/models/global-stats-history'
 
 const instancesRouter = express.Router()
+
+instancesRouter.get('/hosts',
+  instanceHostsValidator,
+  paginationValidator,
+  instanceHostsValidator,
+  setDefaultSort,
+  setDefaultPagination,
+  asyncMiddleware(listInstanceHosts)
+)
 
 instancesRouter.get('/',
   instancesListValidator,
@@ -112,6 +126,18 @@ async function listInstances (req: express.Request, res: express.Response) {
   const resultList = await InstanceModel.listForApi(req.query.start, req.query.count, req.query.sort, { signup, healthy, nsfwPolicy })
 
   return res.json(getFormattedObjects(resultList.data, resultList.total))
+}
+
+
+async function listInstanceHosts (req: express.Request, res: express.Response) {
+  const since = req.query.since
+
+  const resultList = await InstanceModel.listForHostsApi(req.query.start, req.query.count, req.query.sort, { since })
+
+  return res.json({
+    total: resultList.total,
+    data: resultList.data.map(d => d.toHostFormattedJSON())
+  })
 }
 
 async function getGlobalStats (req: express.Request, res: express.Response) {

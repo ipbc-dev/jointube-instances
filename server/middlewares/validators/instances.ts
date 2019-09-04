@@ -11,7 +11,18 @@ const instancesListValidator = [
   query('nsfwPolicy').optional().isArray().withMessage('Should have a valid nsfwPolicy filter'),
 
   (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    logger.debug('Checking instances list parameters', { parameters: req.params })
+    logger.debug('Checking instances list parameters', { parameters: req.query })
+
+    if (areValidationErrors(req, res)) return
+    return next()
+  }
+]
+
+const instanceHostsValidator = [
+  query('since').optional().isISO8601().withMessage('Should have a valid since filter'),
+
+  (req: express.Request, res: express.Response, next: express.NextFunction) => {
+    logger.debug('Checking instance hosts list parameters', { parameters: req.query })
 
     if (areValidationErrors(req, res)) return
     return next()
@@ -70,5 +81,6 @@ const instanceGetValidator = [
 export {
   instancesAddValidator,
   instanceGetValidator,
+  instanceHostsValidator,
   instancesListValidator
 }
