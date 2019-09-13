@@ -1,4 +1,4 @@
-import { AllowNull, Column, CreatedAt, DataType, Default, Is, IsInt, Max, Model, Sequelize, Table, UpdatedAt } from 'sequelize-typescript'
+import { AllowNull, Column, CreatedAt, DataType, Default, Is, IsInt, Max, Model, Table, UpdatedAt } from 'sequelize-typescript'
 import { ServerConfig } from '../../PeerTube/shared/models'
 import { ServerStats } from '../../PeerTube/shared/models/server/server-stats.model'
 import { InstanceConnectivityStats } from 'shared/models/instance-connectivity-stats.model'
@@ -8,6 +8,7 @@ import { logger } from '../helpers/logger'
 import { INSTANCE_SCORE } from '../initializers/constants'
 import { getSort, throwIfNotValid } from './utils'
 import * as sequelize from 'sequelize'
+import { FindAndCountOptions, literal, Op, QueryTypes, WhereOptions } from 'sequelize'
 import { InstanceHost } from '../../shared/models/instance-host.model'
 
 @Table({
@@ -66,48 +67,61 @@ export class InstanceModel extends Model<InstanceModel> {
     return InstanceModel.findOne(query)
   }
 
-  static listForApi (start: number, count: number, sort: string, filters: { signup?: string, healthy?: string, nsfwPolicy?: string[] }) {
-    const query = {
-      offset: start,
-      limit: count,
-      order: InstanceModel.getSort(sort),
-      where: {
-        blacklisted: false
-      }
+  static listForApi (options: {
+    start: number,
+    count: number, sort: string,
+    signup?: string,
+    healthy?: string,
+    nsfwPolicy?: string[],
+    search?: string
+  }) {
+    const whereAnd: WhereOptions[] = []
+
+    const query: FindAndCountOptions = {
+      offset: options.start,
+      limit: options.count,
+      order: InstanceModel.getSort(options.sort)
     }
 
-    if (filters.healthy !== undefined) {
-      const symbol = filters.healthy === 'true' ? Sequelize.Op.gte : Sequelize.Op.lt
-      Object.assign(query.where, {
+    if (options.healthy !== undefined) {
+      const symbol = options.healthy === 'true' ? Op.gte : Op.lt
+
+      whereAnd.push({
         score: {
           [symbol]: INSTANCE_SCORE.HEALTHY_AT
         }
       })
     }
 
-    if (filters.nsfwPolicy !== undefined || filters.signup !== undefined) {
-      const configWhere: any = {}
-
-      if (filters.signup !== undefined) {
-        Object.assign(configWhere, {
+    if (options.signup !== undefined) {
+      whereAnd.push({
+        config: {
           signup: {
-            allowed: filters.signup === 'true'
+            allowed: options.signup === 'true'
           }
-        })
-      }
-
-      if (filters.nsfwPolicy !== undefined) {
-        Object.assign(configWhere, {
-          instance: {
-            defaultNSFWPolicy: {
-              [ Sequelize.Op.any ]: filters.nsfwPolicy
-            }
-          }
-        })
-      }
-
-      Object.assign(query.where, { config: configWhere })
+        }
+      })
     }
+
+    if (options.nsfwPolicy !== undefined) {
+      whereAnd.push({
+        instance: {
+          defaultNSFWPolicy: {
+            [ Op.any ]: options.nsfwPolicy
+          }
+        }
+      })
+    }
+
+    if (options.search) {
+      whereAnd.push({
+        host: {
+          [ Op.iLike ]: `%${options.search}%`
+        }
+      })
+    }
+
+    query.where = { [Op.and]: whereAnd }
 
     return InstanceModel.findAndCountAll(query)
       .then(({ rows, count }) => {
@@ -132,7 +146,7 @@ export class InstanceModel extends Model<InstanceModel> {
     if (filters.since !== undefined) {
       Object.assign(query.where, {
         createdAt: {
-          [Sequelize.Op.gte]: filters.since
+          [Op.gte]: filters.since
         }
       })
     }
@@ -210,7 +224,7 @@ export class InstanceModel extends Model<InstanceModel> {
 
     return InstanceModel.sequelize.query(query, { type: sequelize.QueryTypes.SELECT })
       .then(([ res ]) => res)
-      .then(res => ({
+      .then((res: any) => ({
         totalInstances: res.totalInstances,
         totalUsers: res.totalUsers,
         totalVideos: res.totalVideos,
@@ -224,7 +238,7 @@ export class InstanceModel extends Model<InstanceModel> {
     const query = {
       where: {
         score: {
-          [Sequelize.Op.lte]: 0
+          [Op.lte]: 0
         }
       },
       logging: false
@@ -240,7 +254,7 @@ export class InstanceModel extends Model<InstanceModel> {
       'WHERE id IN (' + instancesString + ')'
 
     const options = {
-      type: Sequelize.QueryTypes.BULKUPDATE
+      type: QueryTypes.BULKUPDATE
     }
 
     return InstanceModel.sequelize.query(query, options)
@@ -248,7 +262,15 @@ export class InstanceModel extends Model<InstanceModel> {
 
   private static getSort (sort: string) {
     const mappingColumns = {
-      totalUsers: 'stats.totalUsers'
+      totalUsers: literal(`stats->'totalUsers'`),
+      totalVideos: literal(`stats->'totalVideos'`),
+      totalLocalVideos: literal(`stats->'totalLocalVideos'`),
+      totalInstanceFollowers: literal(`stats->'totalInstanceFollowers'`),
+      totalInstanceFollowing: literal(`stats->'totalInstanceFollowing'`),
+      signupAllowed: literal(`config->'signup'->'allowed'`),
+      name: literal(`config->'instance'->'name'`),
+      version: literal(`config->'serverVersion'`),
+      health: 'score'
     }
 
     return getSort(sort, [ 'id', 'ASC' ], mappingColumns)

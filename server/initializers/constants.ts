@@ -19,8 +19,24 @@ const CONFIG = {
   }
 }
 
+
+
 const SORTABLE_COLUMNS = {
-  INSTANCES: [ 'id', 'host', 'createdAt', 'totalUsers' ],
+  INSTANCES: [
+    'id',
+    'host',
+    'createdAt',
+    'name',
+    'health',
+    'totalUsers',
+    'totalVideos',
+    'totalLocalVideos',
+    'totalInstanceFollowers',
+    'totalInstanceFollowing',
+    'signupAllowed',
+    'version'
+  ],
+
   INSTANCE_HOSTS: [ 'createdAt', 'host' ]
 }
 

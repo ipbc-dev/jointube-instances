@@ -10,15 +10,25 @@
     </div>
 
     <vue-good-table
+      mode="remote"
       :columns="columns"
       :rows="rows"
-      :search-options="searchOptions"
-      :sort-options="sortOptions"
       :lineNumbers="false"
+      :totalRows="totalRecords"
+
+      :pagination-options="paginationOptions"
+      :search-options="searchOptions"
+
+      @on-search="onSearch"
+      @on-page-change="onPageChange"
+      @on-sort-change="onSortChange"
+      @on-per-page-change="onPerPageChange"
+
       styleClass="table table-bordered table-stripped"
     >
       <div slot="emptystate">
-        Loading...
+        <span v-if="totalRecords === 0">No results.</span>
+        <span v-else>Loading...</span>
       </div>
 
       <template slot="table-row" slot-scope="props">
@@ -98,52 +108,33 @@
 <script lang="ts">
   import { Vue, Component } from 'vue-property-decorator'
 
-  import * as semver from 'semver'
   import { Instance } from '../../../shared/models/instance.model'
   import { listInstances } from '../shared/instance-http'
   import faSmile from '@fortawesome/fontawesome-free-solid/faSmile'
   import faMeh from '@fortawesome/fontawesome-free-solid/faMeh'
   import faFrown from '@fortawesome/fontawesome-free-solid/faFrown'
+  import debounce from 'lodash/debounce'
 
   @Component
   export default class InstanceList extends Vue {
-    searchOptions = {
-      enabled: true,
-      placeholder: 'Search among instances',
-      searchFn: (row: any, col: any, cellValue: any, searchTerm: string) => {
-        return row.name.includes(searchTerm) || row.host.includes(searchTerm)
-      }
-    }
-
-    sortOptions = {
-      enabled: true
-    }
-
     columns = [
       {
         label: 'Name',
         field: 'name',
         sortable: true,
-        filterable: true,
         tdClass: 'name'
       },
       {
         label: 'Url',
         field: 'host',
         sortable: true,
-        filterable: true,
         tdClass: 'host'
       },
       {
         label: 'Version',
         field: 'version',
         sortable: true,
-        tdClass: 'version',
-        sortFn: function (v1: string, v2: string) {
-          if (semver.lt(v1, v2)) return 1
-          if (v1 === v2) return 0
-          return -1
-        }
+        tdClass: 'version'
       },
       {
         label: 'Users',
@@ -179,12 +170,7 @@
         label: 'Signup',
         field: 'signupAllowed',
         type: 'boolean',
-        sortable: true,
-        sortFn: function (x: boolean, y: boolean) {
-          if (x < y) return 1
-          if (x === y) return 0
-          return -1
-        }
+        sortable: true
       },
       {
         label: 'Location',
@@ -199,7 +185,27 @@
         type: 'number'
       }
     ]
-    rows: Instance[] = [ ]
+
+    rows: Instance[] = []
+    totalRecords: number
+
+    perPage = 10
+
+    searchOptions = {
+      enabled: true,
+      placeholder: 'Search among instances'
+    }
+
+    paginationOptions = {
+      enabled: true,
+      perPage: this.perPage
+    }
+
+    onSearch = debounce(this.onSearchImpl.bind(this), 500)
+
+    private search = ''
+    private sort = '-createdAt'
+    private currentPage = 1
 
     async mounted () {
       this.loadData()
@@ -225,10 +231,39 @@
       return '#f44141'
     }
 
+    onPageChange (params: { currentPage: number }) {
+      this.currentPage = params.currentPage
+      this.loadData()
+    }
+
+    onPerPageChange (params: { currentPerPage: number }) {
+      this.perPage = params.currentPerPage
+    }
+
+    onSortChange (params: any) {
+      const newSort = params[0]
+
+      this.sort = newSort.type === 'asc' ? '' : '-'
+      this.sort += newSort.field
+
+      this.loadData()
+    }
+
+    private onSearchImpl (params: { searchTerm: string }) {
+      this.search = params.searchTerm
+      this.loadData()
+    }
+
     private async loadData () {
-      const response = await listInstances()
+      const response = await listInstances({
+        page: this.currentPage,
+        perPage: this.perPage,
+        sort: this.sort,
+        search: this.search
+      })
 
       this.rows = response.data
+      this.totalRecords = response.total
     }
   }
 </script>

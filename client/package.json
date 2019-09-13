@@ -16,7 +16,7 @@
     "vue": "^2.6.3",
     "vue-class-component": "^7.1.0",
     "vue-country-flag": "^1.1.0",
-    "vue-good-table": "^2.16.0",
+    "vue-good-table": "^2.18.0",
     "vue-property-decorator": "^8.2.1",
     "vue-router": "^3.0.1"
   },
@@ -30,11 +30,11 @@
     "@vue/cli-service": "^3.4.0",
     "bytes": "^3.1.0",
     "laue": "^0.2.0",
+    "lodash": "^4.17.15",
     "node-sass": "^4.11.0",
     "rollup-plugin-commonjs": "^10.0.1",
     "rollup-plugin-vue": "^5.0.1",
     "sass-loader": "^7.1.0",
-    "semver": "^6.2.0",
     "vue-template-compiler": "^2.6.3"
   },
   "browserslist": [

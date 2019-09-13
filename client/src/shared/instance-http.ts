@@ -7,14 +7,16 @@ import { GlobalStatsHistory } from '../../../shared/models/global-stats-history'
 
 const baseInstancePath = '/api/v1/instances'
 
-function listInstances (sort?: string) {
+function listInstances (params: { page: number, perPage: number, sort: string, search?: string }) {
   const options = {
     params: {
-      sort,
-      start: 0,
-      count: 500 // https://github.com/xaksis/vue-good-table/issues/186
+      start: (params.page - 1) * params.perPage,
+      count: params.perPage,
+      sort: params.sort
     }
   }
+
+  if (params.search) Object.assign(options.params, { search: params.search })
 
   return axios.get<ResultList<Instance>>(buildApiUrl(baseInstancePath), options)
     .then(res => res.data)

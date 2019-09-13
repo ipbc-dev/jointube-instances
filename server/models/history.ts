@@ -2,6 +2,7 @@ import { AllowNull, BelongsTo, Column, CreatedAt, DataType, ForeignKey, Model, T
 import { ServerStats } from '../../PeerTube/shared/models/server/server-stats.model'
 import { InstanceModel } from './instance'
 import * as Sequelize from 'sequelize'
+import { Order } from 'sequelize'
 import { MAX_HISTORY_SIZE } from '../initializers/constants'
 
 @Table({
@@ -51,7 +52,7 @@ export class HistoryModel extends Model<HistoryModel> {
     }
 
     return HistoryModel.sequelize.query(query, options)
-                     .then(results => {
+                     .then((results: any[]) => {
                        return results.length === 1
                      })
   }
@@ -69,7 +70,7 @@ export class HistoryModel extends Model<HistoryModel> {
 
   static getInstanceHistory (instanceId: number) {
     const query = {
-      order: [ [ 'createdAt', 'DESC' ] ],
+      order: [ [ 'createdAt', 'DESC' ] ] as Order,
       limit: MAX_HISTORY_SIZE,
       where: {
         instanceId
@@ -96,7 +97,7 @@ export class HistoryModel extends Model<HistoryModel> {
       'LIMIT ' + MAX_HISTORY_SIZE
 
     return InstanceModel.sequelize.query(query, { type: Sequelize.QueryTypes.SELECT })
-                        .then(results => results.map(res => ({
+                        .then((results: any[]) => results.map(res => ({
                           date: res.date,
                           stats: {
                             totalInstances: res.totalInstances,

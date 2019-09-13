@@ -122,8 +122,17 @@ async function listInstances (req: express.Request, res: express.Response) {
   const signup = req.query.signup
   const healthy = req.query.healthy
   const nsfwPolicy = req.query.nsfwPolicy
+  const search = req.query.search
 
-  const resultList = await InstanceModel.listForApi(req.query.start, req.query.count, req.query.sort, { signup, healthy, nsfwPolicy })
+  const resultList = await InstanceModel.listForApi({
+    start: req.query.start,
+    count: req.query.count,
+    sort: req.query.sort,
+    signup,
+    healthy,
+    nsfwPolicy,
+    search
+  })
 
   return res.json(getFormattedObjects(resultList.data, resultList.total))
 }

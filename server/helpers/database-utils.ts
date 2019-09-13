@@ -1,6 +1,5 @@
 import * as retry from 'async/retry'
 import * as Bluebird from 'bluebird'
-import { Model } from 'sequelize-typescript'
 import { logger } from './logger'
 
 type RetryTransactionWrapperOptions = { errorMessage: string, arguments?: any[] }
@@ -36,18 +35,9 @@ function transactionRetryer <T> (func: (err: any, data: T) => any) {
   })
 }
 
-function updateInstanceWithAnother <T extends Model<T>> (instanceToUpdate: Model<T>, baseInstance: Model<T>) {
-  const obj = baseInstance.toJSON()
-
-  for (const key of Object.keys(obj)) {
-    instanceToUpdate.set(key, obj[key])
-  }
-}
-
 // ---------------------------------------------------------------------------
 
 export {
   retryTransactionWrapper,
-  transactionRetryer,
-  updateInstanceWithAnother
+  transactionRetryer
 }
