@@ -3,7 +3,7 @@ import { ServerConfig } from '../../../PeerTube/shared/models'
 import { ServerStats } from '../../../PeerTube/shared/models/server/server-stats.model'
 import { InstanceConnectivityStats } from 'shared/models/instance-connectivity-stats.model'
 import { retryTransactionWrapper } from '../../helpers/database-utils'
-import { getConfigAndStatsInstance } from '../../helpers/instance-requests'
+import { getConfigAndStatsAndAboutInstance } from '../../helpers/instance-requests'
 import { logger } from '../../helpers/logger'
 import { getFormattedObjects } from '../../helpers/utils'
 import { asyncMiddleware } from '../../middlewares/async'
@@ -77,7 +77,7 @@ async function createInstanceRetryWrapper (req: express.Request, res: express.Re
   let connectivityStats: InstanceConnectivityStats
 
   try {
-    const res = await getConfigAndStatsInstance(host)
+    const res = await getConfigAndStatsAndAboutInstance(host)
     config = res.config
     stats = res.stats
     connectivityStats = res.connectivityStats
@@ -123,6 +123,8 @@ async function listInstances (req: express.Request, res: express.Response) {
   const healthy = req.query.healthy
   const nsfwPolicy = req.query.nsfwPolicy
   const search = req.query.search
+  const categoriesOr = req.query.categoriesOr
+  const languagesOr = req.query.languagesOr
 
   const resultList = await InstanceModel.listForApi({
     start: req.query.start,
@@ -131,7 +133,9 @@ async function listInstances (req: express.Request, res: express.Response) {
     signup,
     healthy,
     nsfwPolicy,
-    search
+    search,
+    categoriesOr,
+    languagesOr
   })
 
   return res.json(getFormattedObjects(resultList.data, resultList.total))

@@ -1,5 +1,6 @@
 import { AllowNull, Column, CreatedAt, DataType, Default, Is, IsInt, Max, Model, Table, UpdatedAt } from 'sequelize-typescript'
 import { ServerConfig } from '../../PeerTube/shared/models'
+import { About } from '../../PeerTube/shared/models/server/about.model'
 import { ServerStats } from '../../PeerTube/shared/models/server/server-stats.model'
 import { InstanceConnectivityStats } from 'shared/models/instance-connectivity-stats.model'
 import { Instance } from '../../shared/models/instance.model'
@@ -47,6 +48,20 @@ export class InstanceModel extends Model<InstanceModel> {
   config: ServerConfig
 
   @AllowNull(false)
+  @Column(DataType.JSONB)
+  about: About
+
+  @AllowNull(false)
+  @Default([])
+  @Column(DataType.ARRAY(DataType.INTEGER))
+  categories: number[]
+
+  @AllowNull(false)
+  @Default([])
+  @Column(DataType.ARRAY(DataType.TEXT))
+  languages: string[]
+
+  @AllowNull(false)
   @Default(false)
   @Column
   blacklisted: boolean
@@ -74,6 +89,8 @@ export class InstanceModel extends Model<InstanceModel> {
     healthy?: string,
     nsfwPolicy?: string[],
     search?: string
+    categoriesOr?: number[]
+    languagesOr?: string[]
   }) {
     const whereAnd: WhereOptions[] = []
 
@@ -105,9 +122,11 @@ export class InstanceModel extends Model<InstanceModel> {
 
     if (options.nsfwPolicy !== undefined) {
       whereAnd.push({
-        instance: {
-          defaultNSFWPolicy: {
-            [ Op.any ]: options.nsfwPolicy
+        config: {
+          instance: {
+            defaultNSFWPolicy: {
+              [ Op.any ]: options.nsfwPolicy
+            }
           }
         }
       })
@@ -117,6 +136,22 @@ export class InstanceModel extends Model<InstanceModel> {
       whereAnd.push({
         host: {
           [ Op.iLike ]: `%${options.search}%`
+        }
+      })
+    }
+
+    if (Array.isArray(options.languagesOr)) {
+      whereAnd.push({
+        languages: {
+          [ Op.overlap ]: options.languagesOr
+        }
+      })
+    }
+
+    if (Array.isArray(options.categoriesOr)) {
+      whereAnd.push({
+        categories: {
+          [ Op.overlap ]: options.categoriesOr
         }
       })
     }
@@ -171,14 +206,25 @@ export class InstanceModel extends Model<InstanceModel> {
     return InstanceModel.findAll(query)
   }
 
-  static updateConfigAndStats (id: number, config: any, stats: any, connectivityStats: any) {
+  static updateConfigAndStatsAndAbout (id: number, config: any, stats: any, about: About, connectivityStats: any) {
     const options = {
       where: { id }
     }
 
+    const categories = about && about.instance && Array.isArray(about.instance.categories)
+      ? about.instance.categories
+      : []
+
+    const languages = about && about.instance && Array.isArray(about.instance.languages)
+      ? about.instance.languages
+      : []
+
     return InstanceModel.update({
       config,
       stats,
+      about,
+      categories,
+      languages,
       connectivityStats
     }, options)
   }

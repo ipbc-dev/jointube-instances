@@ -187,7 +187,7 @@
     ]
 
     rows: Instance[] = []
-    totalRecords: number
+    totalRecords!: number
 
     perPage = 10
 

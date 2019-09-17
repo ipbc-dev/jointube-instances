@@ -1,4 +1,4 @@
-import { getConfigAndStatsInstance } from '../helpers/instance-requests'
+import { getConfigAndStatsAndAboutInstance } from '../helpers/instance-requests'
 import { CONCURRENCY_REQUESTS, SCHEDULER_INTERVAL } from '../initializers/constants'
 import { InstanceModel } from '../models/instance'
 import { logger } from '../helpers/logger'
@@ -37,8 +37,8 @@ export class RequestsScheduler {
     const instances = await InstanceModel.listHostsWithId()
     await Bluebird.map(instances, async instance => {
       try {
-        const { config, stats, connectivityStats } = await getConfigAndStatsInstance(instance.host)
-        await InstanceModel.updateConfigAndStats(instance.id, config, stats, connectivityStats)
+        const { config, stats, about, connectivityStats } = await getConfigAndStatsAndAboutInstance(instance.host)
+        await InstanceModel.updateConfigAndStatsAndAbout(instance.id, config, stats, about, connectivityStats)
         await HistoryModel.addEntryIfNeeded(instance.id, stats)
 
         goodInstances.push(instance.id)

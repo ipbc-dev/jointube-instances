@@ -5,6 +5,7 @@ import { countryLookup } from '../initializers/geoip'
 import { isTestInstance } from './core-utils'
 import { faultTolerantResolve } from './utils'
 import { doRequest } from './requests'
+import { About } from '../../PeerTube/shared/models/server'
 
 async function fetchInstanceConfig (host: string) {
   const path = '/api/v1/config'
@@ -18,6 +19,20 @@ async function fetchInstanceConfig (host: string) {
 
   const { body } = await doRequest(options)
   return body as ServerConfig
+}
+
+async function fetchInstanceAbout (host: string) {
+  const path = '/api/v1/config/about'
+
+  const options = {
+    uri: getScheme() + host + path,
+    method: 'GET',
+    json: true,
+    timeout: 5000
+  }
+
+  const { body } = await doRequest(options)
+  return body as About
 }
 
 async function fetchInstanceStats (host: string) {
@@ -49,9 +64,10 @@ async function fetchInstanceStats (host: string) {
   }
 }
 
-async function getConfigAndStatsInstance (host: string) {
-  const [ config, { stats, connectivityStats } ] = await Promise.all([
+async function getConfigAndStatsAndAboutInstance (host: string) {
+  const [ config, about, { stats, connectivityStats } ] = await Promise.all([
     fetchInstanceConfig(host),
+    fetchInstanceAbout(host),
     fetchInstanceStats(host)
   ])
 
@@ -59,15 +75,16 @@ async function getConfigAndStatsInstance (host: string) {
     throw new Error('Invalid remote host. Are you sure this is a PeerTube instance?')
   }
 
-  return { config, stats, connectivityStats }
+  return { config, stats, about, connectivityStats }
 }
 
 // ---------------------------------------------------------------------------
 
 export {
-  getConfigAndStatsInstance,
+  getConfigAndStatsAndAboutInstance,
   fetchInstanceConfig,
-  fetchInstanceStats
+  fetchInstanceStats,
+  fetchInstanceAbout
 }
 
 // ---------------------------------------------------------------------------
