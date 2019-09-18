@@ -367,7 +367,10 @@ export class InstanceModel extends Model<InstanceModel> {
       categories: this.categories,
       languages: this.languages,
 
-      autoBlacklistUserVideosEnabled: this.config.autoBlacklist.videos.ofUsers.enabled,
+      autoBlacklistUserVideosEnabled: this.config.autoBlacklist
+        ? this.config.autoBlacklist.videos.ofUsers.enabled
+        : false,
+
       defaultNSFWPolicy: this.config.instance.defaultNSFWPolicy,
       isNSFW: this.config.instance.isNSFW,
 
