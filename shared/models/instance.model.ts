@@ -1,4 +1,5 @@
 import { InstanceStats } from './instance-stats.model'
+import { NSFWPolicyType } from '../../PeerTube/shared/models/videos/nsfw-policy.type'
 
 export interface Instance extends InstanceStats {
   id: number
@@ -9,6 +10,10 @@ export interface Instance extends InstanceStats {
   version: string
   signupAllowed: boolean
   userVideoQuota: number
+
+  autoBlacklistUserVideosEnabled: boolean
+  defaultNSFWPolicy: NSFWPolicyType
+  isNSFW: boolean
 
   supportsIPv6?: boolean
   country?: string

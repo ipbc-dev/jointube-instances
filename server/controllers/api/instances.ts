@@ -122,7 +122,8 @@ async function listInstances (req: express.Request, res: express.Response) {
   const signup = req.query.signup
   const healthy = req.query.healthy
   const nsfwPolicy = req.query.nsfwPolicy
-  const search = req.query.search
+  const search: string = req.query.search
+  const minUserQuota = req.query.minUserQuota
   const categoriesOr = req.query.categoriesOr
   const languagesOr = req.query.languagesOr
 
@@ -135,7 +136,8 @@ async function listInstances (req: express.Request, res: express.Response) {
     nsfwPolicy,
     search,
     categoriesOr,
-    languagesOr
+    languagesOr,
+    minUserQuota
   })
 
   return res.json(getFormattedObjects(resultList.data, resultList.total))

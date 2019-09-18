@@ -11,6 +11,7 @@ const instancesListValidator = [
   query('nsfwPolicy').optional().isArray().withMessage('Should have a valid nsfwPolicy filter'),
   query('languages').optional().isArray().withMessage('Should have a valid languages filter'),
   query('categories').optional().isArray().withMessage('Should have a valid categories filter'),
+  query('minUserQuota').optional().isInt().toInt().withMessage('Should have a valid min user quota'),
 
   (req: express.Request, res: express.Response, next: express.NextFunction) => {
     logger.debug('Checking instances list parameters', { parameters: req.query })

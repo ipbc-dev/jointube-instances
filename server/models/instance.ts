@@ -84,12 +84,14 @@ export class InstanceModel extends Model<InstanceModel> {
 
   static listForApi (options: {
     start: number,
-    count: number, sort: string,
+    count: number,
+    sort: string,
     signup?: string,
     healthy?: string,
     nsfwPolicy?: string[],
-    search?: string
-    categoriesOr?: number[]
+    minUserQuota?: number,
+    search?: string,
+    categoriesOr?: number[],
     languagesOr?: string[]
   }) {
     const whereAnd: WhereOptions[] = []
@@ -153,6 +155,31 @@ export class InstanceModel extends Model<InstanceModel> {
         categories: {
           [ Op.overlap ]: options.categoriesOr
         }
+      })
+    }
+
+    if (options.minUserQuota) {
+      whereAnd.push({
+        [ Op.or ]: [
+          {
+            config: {
+              user: {
+                videoQuota: {
+                  [ Op.gte ]: options.minUserQuota
+                }
+              }
+            }
+          },
+          {
+            config: {
+              user: {
+                videoQuota: {
+                  [ Op.eq ]: -1
+                }
+              }
+            }
+          }
+        ]
       })
     }
 
@@ -336,6 +363,10 @@ export class InstanceModel extends Model<InstanceModel> {
       version: this.config.serverVersion,
       signupAllowed: this.config.signup.allowed,
       userVideoQuota,
+
+      autoBlacklistUserVideosEnabled: this.config.autoBlacklist.videos.ofUsers.enabled,
+      defaultNSFWPolicy: this.config.instance.defaultNSFWPolicy,
+      isNSFW: this.config.instance.isNSFW,
 
       // stats
       totalUsers: this.stats.totalUsers,
