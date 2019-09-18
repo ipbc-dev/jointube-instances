@@ -364,6 +364,9 @@ export class InstanceModel extends Model<InstanceModel> {
       signupAllowed: this.config.signup.allowed,
       userVideoQuota,
 
+      categories: this.categories,
+      languages: this.languages,
+
       autoBlacklistUserVideosEnabled: this.config.autoBlacklist.videos.ofUsers.enabled,
       defaultNSFWPolicy: this.config.instance.defaultNSFWPolicy,
       isNSFW: this.config.instance.isNSFW,

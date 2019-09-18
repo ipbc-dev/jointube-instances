@@ -11,6 +11,9 @@ export interface Instance extends InstanceStats {
   signupAllowed: boolean
   userVideoQuota: number
 
+  categories: number[]
+  languages: string[]
+
   autoBlacklistUserVideosEnabled: boolean
   defaultNSFWPolicy: NSFWPolicyType
   isNSFW: boolean
