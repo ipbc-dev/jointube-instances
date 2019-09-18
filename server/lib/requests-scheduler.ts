@@ -17,6 +17,8 @@ export class RequestsScheduler {
   enable () {
     logger.info('Enabling request scheduler.')
     this.interval = setInterval(() => this.execute(), SCHEDULER_INTERVAL)
+
+    this.execute()
   }
 
   disable () {
