@@ -11,6 +11,7 @@ import { getSort, throwIfNotValid } from './utils'
 import * as sequelize from 'sequelize'
 import { FindAndCountOptions, literal, Op, QueryTypes, WhereOptions } from 'sequelize'
 import { InstanceHost } from '../../shared/models/instance-host.model'
+import { NSFWPolicyType } from '../../PeerTube/shared/models/videos/nsfw-policy.type'
 
 @Table({
   tableName: 'instance',
@@ -88,7 +89,7 @@ export class InstanceModel extends Model<InstanceModel> {
     sort: string,
     signup?: string,
     healthy?: string,
-    nsfwPolicy?: string[],
+    nsfwPolicy?: NSFWPolicyType[],
     minUserQuota?: number,
     search?: string,
     categoriesOr?: number[],
