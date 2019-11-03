@@ -103,7 +103,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/InstanceStats'
 servers:
-  - url: 'https://intsances.joinpeertube.org/api/v1'
+  - url: 'https://instances.joinpeertube.org/api/v1'
     description: Official Server (live data - stable version)
 components:
   parameters:
