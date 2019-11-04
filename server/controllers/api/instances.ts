@@ -22,6 +22,7 @@ import { HistoryModel } from '../../models/history'
 import { InstanceStatsHistory } from '../../../shared/models/instance-stats-history.model'
 import { GlobalStats } from '../../../shared/models/global-stats.model'
 import { GlobalStatsHistory } from '../../../shared/models/global-stats-history'
+import { About } from '../../../PeerTube/shared/models/server'
 
 const instancesRouter = express.Router()
 
@@ -74,25 +75,27 @@ async function createInstanceRetryWrapper (req: express.Request, res: express.Re
 
   let config: ServerConfig
   let stats: ServerStats
+  let about: About
   let connectivityStats: InstanceConnectivityStats
 
   try {
     const res = await getConfigAndStatsAndAboutInstance(host)
     config = res.config
     stats = res.stats
+    about = res.about
     connectivityStats = res.connectivityStats
   } catch (err) {
     logger.warn(err)
 
     return res.status(409)
-      .json({
-        error: err.message
-      })
-      .end()
+              .json({
+                error: err.message
+              })
+              .end()
   }
 
   const options = {
-    arguments: [ host, config, stats, connectivityStats ],
+    arguments: [ { host, config, stats, connectivityStats, about } ],
     errorMessage: 'Cannot insert the instance with many retries.'
   }
   const instance = await retryTransactionWrapper(createInstance, options)
@@ -105,11 +108,20 @@ async function createInstanceRetryWrapper (req: express.Request, res: express.Re
   }).end()
 }
 
-async function createInstance (host: string, config: ServerConfig, stats: ServerStats, connectivityStats: InstanceConnectivityStats) {
+async function createInstance (options: {
+  host: string,
+  config: ServerConfig,
+  stats: ServerStats,
+  about: About,
+  connectivityStats: InstanceConnectivityStats
+}) {
+  const { host, config, stats, about, connectivityStats } = options
+
   const instanceCreated = await InstanceModel.create({
     host,
     config,
     stats,
+    about,
     connectivityStats
   })
 
