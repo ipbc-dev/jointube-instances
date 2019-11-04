@@ -22,14 +22,6 @@ function asyncMiddleware (fun: RequestPromiseHandler | RequestPromiseHandler[]) 
   }
 }
 
-function asyncRetryTransactionMiddleware (fun: (req: Request, res: Response, next: NextFunction) => Promise<any>) {
-  return (req: Request, res: Response, next: NextFunction) => {
-    return Promise.resolve(
-      retryTransactionWrapper(fun, req, res, next)
-    ).catch(err => next(err))
-  }
-}
-
 // ---------------------------------------------------------------------------
 
 export {
