@@ -32,7 +32,7 @@
       </div>
 
       <template slot="table-row" slot-scope="props">
-        <span v-if="props.column.field === 'name'" :title="props.row.name">{{ props.row.name }}</span>
+        <span v-if="props.column.field === 'name'" :title="getInstanceNameTitle(props.row)">{{ props.row.name }}</span>
 
         <a v-else-if="props.column.field === 'host'" :href="getUrl(props.row.host)" target="_blank">{{ props.row.host }}</a>
 
@@ -41,7 +41,7 @@
           <span v-else>&#x274C;</span>
         </div>
 
-        <div class="text-center" style="max-height:20px;" v-else-if="props.column.field === 'country'">
+        <div class="text-center" style="max-height:20px;" v-else-if="props.column.field === 'country'" :title="props.row.country">
           <country-flag v-if="props.row.country" :country="props.row.country" style="margin-top:-21px;"/>
         </div>
 
@@ -229,6 +229,10 @@
       if (health > 20) return '#e7563c'
 
       return '#f44141'
+    }
+
+    getInstanceNameTitle (instance: Instance) {
+      return instance.name + '\nAdded on ' + new Date(instance.createdAt).toLocaleString()
     }
 
     onPageChange (params: { currentPage: number }) {
