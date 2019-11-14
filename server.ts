@@ -18,6 +18,7 @@ import { initDatabaseModels, sequelizeTypescript } from './server/initializers/d
 import { RequestsScheduler } from './server/lib/requests-scheduler'
 
 const app = express()
+app.set('trust proxy', 'loopback, uniquelocal')
 
 initDatabaseModels(false)
   .then(() => onDatabaseInitDone())
