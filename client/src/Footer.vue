@@ -1,8 +1,8 @@
 <template>
   <footer>
     <div class="container">
-      <span v-html="footer" v-once></span> · 
-      <a target="_blank" href="https://framagit.org/chocobozzz/instances-peertube">
+      <span v-html="footer" v-once></span> ·
+      <a target="_blank" href="https://framagit.org/framasoft/peertube/instances-peertube">
         Hack this website!
       </a>
     </div>
@@ -12,7 +12,7 @@
 <script>
 module.exports = {
   data() {
-    return { 
+    return {
       footer: process.env.VUE_APP_FOOTER
     }
   }
