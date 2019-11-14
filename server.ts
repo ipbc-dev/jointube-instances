@@ -1,6 +1,3 @@
-// FIXME: https://github.com/nodejs/node/pull/16853
-require('tls').DEFAULT_ECDH_CURVE = 'auto'
-
 import { isTestInstance } from './server/helpers/core-utils'
 if (isTestInstance()) {
   require('source-map-support').install()
@@ -12,6 +9,7 @@ import * as cors from 'cors'
 import * as morgan from 'morgan'
 import { join } from 'path'
 import { apiRouter } from './server/controllers/api'
+import { feedsRouter } from './server/controllers/feeds'
 import { logger } from './server/helpers/logger'
 import { API_VERSION, CONFIG } from './server/initializers/constants'
 import { initGeoip } from './server/initializers/geoip'
@@ -40,6 +38,8 @@ app.use(cors())
 
 const apiRoute = '/api/' + API_VERSION
 app.use(apiRoute, apiRouter)
+
+app.use('/feeds/', feedsRouter)
 
 // Static client files
 app.use('/js/', express.static(join(__dirname, '../client/dist/js')))

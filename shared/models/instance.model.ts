@@ -22,4 +22,6 @@ export interface Instance extends InstanceStats {
   country?: string
 
   health: number
+
+  createdAt: string
 }

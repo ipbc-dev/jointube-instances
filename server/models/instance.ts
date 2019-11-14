@@ -388,7 +388,9 @@ export class InstanceModel extends Model<InstanceModel> {
       country: this.connectivityStats ? this.connectivityStats.country : undefined,
 
       // computed stats
-      health: Math.round((this.score / INSTANCE_SCORE.MAX) * 100)
+      health: Math.round((this.score / INSTANCE_SCORE.MAX) * 100),
+
+      createdAt: this.createdAt.toISOString()
     }
   }
 

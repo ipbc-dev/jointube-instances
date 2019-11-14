@@ -7,6 +7,12 @@ const CONFIG = {
   LISTEN: {
     PORT: config.get<number>('listen.port')
   },
+  WEBSERVER: {
+    SCHEME: config.get<boolean>('webserver.https') === true ? 'https' : 'http',
+    HOSTNAME: config.get<string>('webserver.hostname'),
+    PORT: config.get<number>('webserver.port'),
+    URL: ''
+  },
   DATABASE: {
     DBNAME: config.get<string>('database.name'),
     HOSTNAME: config.get<string>('database.hostname'),
@@ -18,8 +24,7 @@ const CONFIG = {
     LEVEL: config.get<string>('log.level')
   }
 }
-
-
+CONFIG.WEBSERVER.URL = CONFIG.WEBSERVER.SCHEME + '://' + CONFIG.WEBSERVER.HOSTNAME + ':' + CONFIG.WEBSERVER.PORT
 
 const SORTABLE_COLUMNS = {
   INSTANCES: [
