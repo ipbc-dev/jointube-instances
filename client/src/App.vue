@@ -1,37 +1,52 @@
 <template>
   <div>
-    <div class="navbar navbar-expand-lg navbar-light bg-light">
-      <div class="container">
-        <router-link class="navbar-brand" to="/"><span v-html="title" v-once></span></router-link>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-          <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
-          <div class="navbar-nav">
-            <router-link class="nav-item nav-link" active-class="active" exact to="/instances">
-              Instances <span class="sr-only">(current)</span>
-            </router-link>
+    <header>
+      <b-navbar toggleable="lg" variant="light">
+        <div class="container">
+        <b-navbar-brand to="/">
+          <span v-html="title" v-once></span>
+        </b-navbar-brand>
 
-            <router-link class="nav-item nav-link" active-class="active" exact to="/instances/add">
+        <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
+
+        <b-collapse id="nav-collapse" is-nav>
+          <b-navbar-nav class="ml-auto">
+
+            <b-nav-item to="/instances" exact>
+              Instances
+            </b-nav-item>
+
+            <b-nav-item to="/instances/add" exact>
               Add your instance
-            </router-link>
+            </b-nav-item>
 
-            <router-link class="nav-item nav-link" active-class="active" exact to="/instances/stats">
+            <b-nav-item to="/instances/stats" exact>
               Stats
-            </router-link>
-
-          </div>
+            </b-nav-item>
+          </b-navbar-nav>
+        </b-collapse>
         </div>
-      </div>
-    </div>
+      </b-navbar>
+    </header>
 
-    <router-view id="main-container" class="container" />
+    <router-view id="main-container" class="container"/>
   </div>
 </template>
 
 <script>
-module.exports = {
-  data() {
+import { BCollapse, BNavbar, BNavbarNav, BNavbarBrand, BNavItem, BNavbarToggle } from 'bootstrap-vue'
+
+export default {
+  components: {
+    BCollapse,
+    BNavbar,
+    BNavbarBrand,
+    BNavItem,
+    BNavbarNav,
+    BNavbarToggle
+  },
+
+  data () {
     return {
       title: process.env.VUE_APP_TITLE
     }
@@ -44,6 +59,10 @@ module.exports = {
 
   a {
     outline: 0;
+
+    &.router-link-active {
+      font-weight: 600;
+    }
   }
 
   #main-container {
