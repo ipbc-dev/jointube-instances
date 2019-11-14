@@ -238,6 +238,8 @@
 
     onPerPageChange (params: { currentPerPage: number }) {
       this.perPage = params.currentPerPage
+      this.currentPage = 1
+      this.loadData()
     }
 
     onSortChange (params: any) {
