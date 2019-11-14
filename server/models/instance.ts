@@ -344,7 +344,8 @@ export class InstanceModel extends Model<InstanceModel> {
       signupAllowed: literal(`config->'signup'->'allowed'`),
       name: literal(`config->'instance'->'name'`),
       version: literal(`config->'serverVersion'`),
-      health: 'score'
+      health: 'score',
+      country: literal(`"connectivityStats"->'country'`)
     }
 
     return getSort(sort, [ 'id', 'ASC' ], mappingColumns)

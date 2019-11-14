@@ -176,7 +176,7 @@
         label: 'Location',
         field: 'country',
         type: 'string',
-        sortable: false
+        sortable: true
       },
       {
         label: 'Health',
@@ -187,7 +187,7 @@
     ]
 
     rows: Instance[] = []
-    totalRecords!: number
+    totalRecords: number | null = null
 
     perPage = 10
 

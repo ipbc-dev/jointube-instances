@@ -16,7 +16,7 @@ import {
   instancesListValidator
 } from '../../middlewares/validators/instances'
 import { paginationValidator } from '../../middlewares/validators/pagination'
-import { instancesSortValidator } from '../../middlewares/validators/sort'
+import { instanceHostsSortValidator, instancesSortValidator } from '../../middlewares/validators/sort'
 import { InstanceModel } from '../../models/instance'
 import { HistoryModel } from '../../models/history'
 import { InstanceStatsHistory } from '../../../shared/models/instance-stats-history.model'
@@ -29,7 +29,7 @@ const instancesRouter = express.Router()
 instancesRouter.get('/hosts',
   instanceHostsValidator,
   paginationValidator,
-  instanceHostsValidator,
+  instanceHostsSortValidator,
   setDefaultSort,
   setDefaultPagination,
   asyncMiddleware(listInstanceHosts)

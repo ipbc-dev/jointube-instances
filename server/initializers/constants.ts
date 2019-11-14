@@ -34,7 +34,8 @@ const SORTABLE_COLUMNS = {
     'totalInstanceFollowers',
     'totalInstanceFollowing',
     'signupAllowed',
-    'version'
+    'version',
+    'country'
   ],
 
   INSTANCE_HOSTS: [ 'createdAt', 'host' ]

@@ -10,5 +10,6 @@ const instanceHostsSortValidator = checkSort(SORTABLE_INSTANCE_HOSTS_COLUMNS)
 // ---------------------------------------------------------------------------
 
 export {
-  instancesSortValidator
+  instancesSortValidator,
+  instanceHostsSortValidator
 }
