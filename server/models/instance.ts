@@ -95,7 +95,11 @@ export class InstanceModel extends Model<InstanceModel> {
     categoriesOr?: number[],
     languagesOr?: string[]
   }) {
-    const whereAnd: WhereOptions[] = []
+    const whereAnd: WhereOptions[] = [
+      {
+        blacklisted: false
+      }
+    ]
 
     const query: FindAndCountOptions = {
       offset: options.start,
