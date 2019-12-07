@@ -23,6 +23,10 @@
             <b-nav-item to="/instances/stats" exact>
               Stats
             </b-nav-item>
+
+            <b-nav-item href="https://contact.framasoft.org" target="_blank">
+              Report an instance
+            </b-nav-item>
           </b-navbar-nav>
         </b-collapse>
         </div>
