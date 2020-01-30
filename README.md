@@ -1,4 +1,4 @@
-# Application behind instances.peertu.be
+# Application behind instances.joinpeertube.org
 
 ## Dev
 
@@ -38,5 +38,36 @@ In the root of the cloned repo:
 $ git submodule update --init --recursive
 $ yarn install --pure-lockfile
 $ npm run build
+$ sudo -u postgres createuser -P peertube
+$ sudo -u postgres createdb -O peertube peertube_instances
 $ node dist/server.js
 ```
+
+## PeerTube auto follow
+
+If you don't want to run this application but would like to have your own index for the [PeerTube auto follow feature](https://docs.joinpeertube.org/#/admin-following-instances?id=automatically-follow-other-instances):
+
+ * Choose a domain name and serve a JSON behind `/api/v1/instances/hosts` route
+ * This JSON should be like this:
+ 
+```
+{
+  "total": 5,
+  "data": [
+    {
+      "host": "video1.example.com"
+    },
+    {
+      "host": "video2.example.com"
+    },
+    {
+      "host": "video3.example.com"
+    },
+    {
+      "host": "video4.example.com"
+    },
+    {
+      "host": "video5.example.com"
+    }
+]
+``` 
