@@ -1,4 +1,4 @@
-import * as geolite2 from 'geolite2'
+import * as geolite2 from 'geolite2-redist'
 import * as maxmind from 'maxmind'
 
 const bluebird = require('bluebird')
@@ -7,7 +7,7 @@ const openDb = bluebird.promisify(maxmind.open)
 let _countryLookup = undefined
 
 const initGeoip = () => {
-  _countryLookup = openDb(geolite2.paths.country, {
+  _countryLookup = openDb(geolite2.paths['GeoLite2-Country'], {
     cache: {
       max: 500 // Max items in cache, by default it's 6000
     }
