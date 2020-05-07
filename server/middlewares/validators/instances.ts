@@ -33,12 +33,15 @@ const instanceHostsValidator = [
 ]
 
 const instancesAddValidator = [
-  body('host').custom(isHostValid).withMessage('Should have a valid host'),
+  body('host')
+  .custom(isHostValid).withMessage('Should have a valid host'),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     logger.debug('Checking instances add parameters', { parameters: req.body })
 
     if (areValidationErrors(req, res)) return
+
+    req.body.host = (req.body.host || '').toLowerCase()
 
     const instance = await InstanceModel.loadByHost(req.body.host)
 
