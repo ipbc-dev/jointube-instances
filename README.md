@@ -45,11 +45,8 @@ $ node dist/server.js
 
 ## PeerTube auto follow
 
-If you don't want to run this application but would like to have your own index for the [PeerTube auto follow feature](https://docs.joinpeertube.org/#/admin-following-instances?id=automatically-follow-other-instances):
+If you don't want to run this application but would like to have your own index for the [PeerTube auto follow feature](https://docs.joinpeertube.org/#/admin-following-instances?id=automatically-follow-other-instances), serve the following JSON format:
 
- * Choose a domain name and serve a JSON behind `/api/v1/instances/hosts` route
- * This JSON should be like this:
- 
 ```
 {
   "total": 5,
@@ -70,4 +67,4 @@ If you don't want to run this application but would like to have your own index 
       "host": "video5.example.com"
     }
 ]
-``` 
+```
