@@ -1,4 +1,4 @@
-# Application behind instances.joinpeertube.org
+# Application behind instances.jointube.net
 
 ## Dev
 
