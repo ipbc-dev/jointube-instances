@@ -20,7 +20,7 @@
     "start": "node dist/server.js"
   },
   "dependencies": {
-    "async": "^3.1.0",
+    "async": "^3.2.2",
     "bluebird": "^3.5.3",
     "body-parser": "^1.12.4",
     "config": "^3.0.1",
