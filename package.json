@@ -25,7 +25,7 @@
     "body-parser": "^1.12.4",
     "config": "^3.0.1",
     "cors": "^2.8.5",
-    "express": "^4.16.4",
+    "express": "^4.17.3",
     "express-validator": "^6.1.1",
     "feed": "^4.0.0",
     "geolite2-redist": "^1.0.4",
